@@ -1,0 +1,11 @@
+.eventList {
+  scroll-behavior: smooth;
+}
+
+.container {
+  max-width: 1400px !important;
+}
+
+.event-back {
+  background-color: blanchedalmond !important;
+}

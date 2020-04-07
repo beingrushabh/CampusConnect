@@ -3,14 +3,14 @@ import "./event_structure.css";
 import axios from "axios";
 import { browserHistory, Router, Route, Redirect, history } from "react-router";
 
-function approve(id, request) {
-  if (request) {
-    const url = `http://localhost:5000/Event/approve/${id}`;
-    // const url_final = url + this.props.id.toString();
-    axios.post(url).then(Response => console.log(Response));
-    return true;
-  }
-}
+// function approve(id, request) {
+//   if (request) {
+//     const url = `http://localhost:5000/Event/approve/${id}`;
+//     // const url_final = url + this.props.id.toString();
+//     axios.post(url).then(Response => console.log(Response));
+//     return true;
+//   }
+// }
 
 class Event_structure extends Component {
   state = {
@@ -27,14 +27,22 @@ class Event_structure extends Component {
 
   constructor(props) {
     super(props);
-    this.requestApprove = this.requestApprove.bind(this);
+    // this.requestApprove = this.requestApprove.bind(this);
     this.updateOrganizer = this.updateOrganizer.bind(this);
   }
 
-  requestApprove(id) {
-    this.setState({
-      temp: approve(id, this.state.request)
-    });
+  // requestApprove(id) {
+  //   this.setState({
+  //     temp: approve(id, this.state.request)
+  //   });
+  // }
+
+  componentDidUpdate(prevProp, PrevState) {
+    if (PrevState.request != this.state.request) {
+      const url = `http://localhost:5000/Event/approve/${this.state.id}`;
+      axios.post(url).then(Response => this.props.refresh());
+      return true;
+    }
   }
 
   updateOrganizer(event) {
@@ -42,16 +50,20 @@ class Event_structure extends Component {
       organizer1: event
     });
   }
+
+  componentDidMount() {
+    axios
+      .get(`http://localhost:5000/ClubCom/${this.state.organizer}`)
+      .then(Response => {
+        this.state.organizerD = Response.data;
+        this.updateOrganizer(this.state.organizerD.Name);
+      });
+  }
+
   render() {
     if (this.state.temp) {
       return <Redirect to="/Admin_dashboard" />;
     } else {
-      axios
-        .get(`http://localhost:5000/ClubCom/${this.state.organizer}`)
-        .then(Response => {
-          this.state.organizerD = Response.data;
-          this.updateOrganizer(this.state.organizerD.Name);
-        });
       return (
         <div>
           <div className="event-template">
@@ -77,11 +89,13 @@ class Event_structure extends Component {
 
             {!this.props.status && (
               <button
+                href="/Admin_dashboard"
                 onClick={() => {
                   this.setState({
                     request: true
                   });
-                  this.requestApprove(this.state.id);
+
+                  // this.requestApprove(this.state.id);
                 }}
                 className="approval"
               >

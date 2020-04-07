@@ -3,13 +3,19 @@ let Event = require('../models/Event.model');
 let Comment = require('../models/Comment.model');
 let User = require('../models/User.model');
 
+router.route('/').get((req, res) => {
+  Comment.find()
+    .then(Comment => res.json(Comment))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
 //id of the event
 router.route('/add/:id').post((req, res) => {
   const Description = req.body.Description;
   const Event = req.params.id;
-    var query = User.findOne({UserName: String(req.body.UserName)},{'_id':1});
-	
-  query.exec(function(err,user){
+  const reported = false;
+  User.findOne({UserName: String(req.body.UserName)},{'_id':1})
+	.exec(function(err,user){
 	  if(err)
 		  return console.log(err);
 		
@@ -19,7 +25,8 @@ router.route('/add/:id').post((req, res) => {
   const newComment = new Comment({
 	  Event,  
 	  Description, 
-	  User	  
+    User,
+    reported	  
 	});
 
   newComment.save()
@@ -43,13 +50,25 @@ router.route('/:id').delete((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/report/:id').post((req,res) => {
+  Comment.findById(req.params.id)
+    .then(comment => {
+        comment.reported = true;
+
+          comment.save()
+          .then(() => res.json('Comment Reported'))
+          .catch(err => res.status(400).json('Error : ' + err));
+    })
+    .catch(err => res.status(400).json('Error: '+err));
+});
+
 router.route('/update/:id').post((req, res) => {
   Comment.findById(req.params.id)
     .then(Comment => {		
 		Comment.Description = req.body.Description;
-		//Comment.Event = Comment.Event;
-		//Comment.User = Comment.User;
-      
+		Comment.Event = Comment.Event;
+		Comment.User = Comment.User;
+    Comment.reported = false;  
 		
 			Comment.save()
 			.then(() => res.json('Comment updated!'))

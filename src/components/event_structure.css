@@ -22,14 +22,14 @@
   margin-bottom: 2px;
   padding: 5px;
   font-size: 30px;
-  margin-bottom: 10px;
+
   color: black;
 }
 .filter {
   position: relative;
-  padding: 10px;
+
   padding-left: 20px;
-  margin-bottom: 20px;
+
   /* border-left: 5px rgb(194, 141, 141) solid;
   border-top: 1px rgb(194, 141, 141) solid;
   border-bottom: 1px rgb(194, 141, 141) solid;
@@ -158,58 +158,5 @@
 .by-date {
   margin-left: 10px;
 }
+
 /* Removes the clear button from date inputs */
-input[type="date"]::-webkit-clear-button {
-  display: none;
-}
-
-/* Removes the spin button */
-input[type="date"]::-webkit-inner-spin-button {
-  display: none;
-}
-
-/* Always display the drop down caret */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  color: #2c3e50;
-}
-
-/* A few custom styles for date inputs */
-input[type="date"] {
-  appearance: none;
-  -webkit-appearance: none;
-  color: #ffffff;
-  font-family: "Helvetica", arial, sans-serif;
-  font-size: 18px;
-  border: 1px solid #ecf0f1;
-  background: #ffffff;
-  padding: 5px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  display: inline-block !important;
-  visibility: visible !important;
-  border: rgb(250, 210, 210) 1px solid;
-  border-radius: 5px;
-}
-
-input[type="date"],
-focus {
-  color: #645050;
-  box-shadow: none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-}
-.date-text {
-  margin-left: 20px;
-  font-size: 20px;
-  color: white;
-}
-
-.temp {
-  padding-left: 5px;
-  margin-left: 1px;
-  display: inline;
-}
-
-.container {
-  max-width: 1400px !important;
-}

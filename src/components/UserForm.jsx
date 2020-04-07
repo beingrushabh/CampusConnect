@@ -46,16 +46,17 @@ class UserForm extends Component {
       Clg_ID: this.state.Clg_ID
     };
 
-    axios
-      .post("http://localhost:5000/User/register", finalObject)
-      .then(res => console.log(res.message));
+    axios.post("http://localhost:5000/User/register", finalObject).then(res => {
+      console.log(res.message);
+      this.props.closePopup();
+    });
   }
 
   render() {
     return (
       <React.Fragment>
         {/* <img src={background} className="main" /> */}
-        <div className="main">
+        <div className="main popup">
           <title>Add User</title>
           <div className="brand">
             <nav class="container  navbar navbar-expand-lg navbar-light navtemp">

@@ -1,14 +1,15 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 let User = require('../models/User.model');
+let ClubCom = require('../models/ClubCom.model');
 
-router.route('/').get((req, res) => {
-  User.find()
+router.route('/').get( async (req, res) => {
+  await User.find()
     .then(User => res.json(User))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/register').post((req, res) => {
+router.route('/register').post( async (req, res) => {
   const UserName = req.body.UserName;
   const Password = bcrypt.hashSync(String(req.body.Password), 10);
   const Email_ID = req.body.Email_ID;
@@ -31,39 +32,53 @@ router.route('/register').post((req, res) => {
       Clg_ID,  
 	});
 
-  newUser.save()
+   await newUser.save()
     .then(() => res.json('User added!'))
     .catch(err => res.status(400).json('Error: ' + err));
 		
 });
 
-router.route('/login').post((req,res) => {
-	User.findOne({UserName: req.body.UserName})
-	.then(user => {
-		if(user==null){
-			return res.status(400).json('Username does not exist');
+router.route('/login').post( async (req,res) => {
+	await ClubCom.findOne({UserName: req.body.UserName})
+	.then(ClubCom => {
+		if(ClubCom == null){
+				User.findOne({UserName: req.body.UserName})
+				.then(user => {
+					if(user==null){
+						return res.status(400).json('Username does not exist');
+					}
+					else if(!bcrypt.compareSync(req.body.Password, user.Password)){
+						return res.status(400).json('Message: The password is invalid');
+					}
+					else {
+						res.json('Login Succesful for id' + user._id);
+					}
+				})
+				.catch(err => res.status(400).json('Error: ' + err));
 		}
-		if(!bcrypt.compareSync(req.body.Password, user.Password)){
+		else if(!bcrypt.compareSync(req.body.Password, ClubCom.Password)){
 			return res.status(400).json('Message: The password is invalid');
 		}
-		res.json('Login Succesful');
+		else {
+			res.json('Login Succesful for id' + ClubCom._id);}
 	})
-	.catch(err => res.status(400).json('Error: ' + err));
+	.catch(err => res.status(400).json('Error' + err));
+
 });
 
-router.route('/:id').get((req, res) => {
-  User.findById(req.params.id)
+router.route('/:id').get( async (req, res) => {
+  await User.findById(req.params.id)
     .then(User => res.json(User))
     .catch(err => res.status(400).json('Error: ' + err));
 });
-router.route('/:id').delete((req, res) => {
-  User.findByIdAndDelete(req.params.id)
+router.route('/:id').delete( async (req, res) => {
+  await User.findByIdAndDelete(req.params.id)
     .then(() => res.json('User deleted.'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/update/:id').post((req, res) => {
-  User.findById(req.params.id)
+router.route('/update/:id').post(async (req, res) => {
+  await User.findById(req.params.id)
     .then(User => {
 		
 		User.UserName = req.body.UserName;
@@ -85,15 +100,15 @@ router.route('/update/:id').post((req, res) => {
 
 
 //change password: provide old passwordas well with new password
-router.route('/changepassword/:id').post((req, res) => {
-  User.findById(req.params.id)
+router.route('/changepassword/:id').post( async (req, res) => {
+  await User.findById(req.params.id)
     .then(User => {
 		if(!bcrypt.compareSync(req.body.OldPassword, User.Password)){
 			return res.status(400).json('Message: The password is invalid');
 		}
 		User.Password = bcrypt.hashSync(req.body.NewPassword, 10);
 		 	  
-      User.save()
+       User.save()
         .then(() => res.json('User updated!'))
         .catch(err => res.status(400).json('Error: ' + err));
     })

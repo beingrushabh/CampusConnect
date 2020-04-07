@@ -7,12 +7,34 @@ class Admin_Events extends Component {
   state = {
     EventD: [],
     updated: false,
-    id: 1234
+    id: 1234,
+    refresh: false
   };
+
+  Refresh() {
+    this.setState({
+      refresh: !this.state.refresh
+    });
+    console.log(this.state.refresh);
+  }
 
   constructor(props) {
     super(props);
+    this.Refresh = this.Refresh.bind(this);
   }
+
+  componentDidUpdate(prevProp, prevState) {
+    if (prevState.refresh != this.state.refresh) {
+      axios.get("http://localhost:5000/Event/Pending").then(Response => {
+        this.state.EventD = Response.data;
+        console.log(this.state.EventD);
+        this.setState({
+          updated: true
+        });
+      });
+    }
+  }
+
   async componentDidMount() {
     console.log("fetch");
     axios.get("http://localhost:5000/Event/Pending").then(Response => {
@@ -33,25 +55,24 @@ class Admin_Events extends Component {
           id={data._id}
           name={data.Name}
           organizer={data.Organizer}
-          date={data.Date_time}
+          date={data.Date}
+          time={data.Time}
           venue={data.Venue}
           description={data.Description}
           status={false}
           duration={data.Duration}
+          refresh={this.Refresh}
         />
       );
     });
     return (
       <div>
-        <div className="container">
-          <div className="header">
-            <h1>Events</h1>
-          </div>
-          <div className="row">
-            <div className="col-lg-4">
-              <Filter />
-            </div>
-            <div className="col-lg-8">{EventList}</div>
+        <div className=" container header">
+          <h1 style={{ color: "black", fontSize: "30px" }}>Events</h1>
+        </div>
+        <div className="row event-back">
+          <div className="scrollEvent">
+            <div className="eventList">{EventList}</div>
           </div>
         </div>
       </div>

@@ -72,12 +72,12 @@ class Placement_updates extends Component {
           </nav>
         </div>
 
+        <div className="header">
+          <h1 style={{ color: "black", fontSize: "30px" }}>
+            Placement updates
+          </h1>
+        </div>
         <div className="container event-back">
-          <div className="header">
-            <h1 style={{ color: "black", fontSize: "30px" }}>
-              Placement updates
-            </h1>
-          </div>
           <div className="row">
             <div className="col-lg-2 col-md-1 col-sm-0"></div>
             <div className="col-lg-8 col-md-10 col-sm-12">

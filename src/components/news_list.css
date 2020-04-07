@@ -1,0 +1,19 @@
+.container {
+  max-width: 1400px !important;
+}
+
+.scrollEvent {
+  flex: 1;
+  overflow-y: scroll !important;
+}
+.filtersec {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.event-back {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}

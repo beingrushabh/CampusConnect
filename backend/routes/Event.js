@@ -8,10 +8,30 @@ router.route("/").get((req, res) => {
     .catch(err => res.status(400).json("Error: " + err));
 });
 
+router.route("/filterBy/:Organizer").get((req, res) => {
+  ClubCom.findOne({ UserName: req.params.Organizer }, { _id: 1 })
+    .then(clubcom => {
+      Event.find({ Organizer: clubcom._id, Approved: true })
+        .then(Event => res.json(Event))
+        .catch(err => res.status(400).json("Error: " + err));
+    })
+    .catch(err => res.status(400).json("Error: " + err));
+});
+
 router.route("/Pending").get((req, res) => {
   Event.find({ Approved: false })
     .then(Event => res.json(Event))
     .catch(err => res.status(400).json("Error: " + err));
+});
+
+router.route("/approve/:id").post((req, res) => {
+  Event.findById(req.params.id).then(event => {
+    event.Approved = true;
+    event
+      .save()
+      .then(() => res.json("Event approved!"))
+      .catch(err => res.status(400).json("Error: " + err));
+  });
 });
 
 router.route("/add").post((req, res) => {
@@ -23,10 +43,13 @@ router.route("/add").post((req, res) => {
   const Venue = req.body.Venue;
   const Duration = req.body.Duration;
   const Description = req.body.Description;
-  const NoOfAttendees = req.body.NoOfAttendees;
+  const NoOfAttendees = 0;
   const Approved = false;
 
-  var query = ClubCom.findOne({ Name: String(req.body.Organizer) }, { _id: 1 });
+  var query = ClubCom.findOne(
+    { UserName: String(req.body.Organizer) },
+    { _id: 1 }
+  );
   query.exec(function(err, clubcom) {
     if (err) return console.log(err);
 
@@ -52,6 +75,26 @@ router.route("/add").post((req, res) => {
   });
 });
 
+router.route("/rsvp/:id").post((req, res) => {
+  Event.findById(req.params.id).then(event => {
+    event.NoOfAttendees = event.NoOfAttendees + 1;
+    event
+      .save()
+      .then(() => res.json("RSVP sucessful!"))
+      .catch(err => res.status(400).json("Error : " + err));
+  });
+});
+
+router.route("/rsvpcancel/:id").post((req, res) => {
+  Event.findById(req.params.id).then(event => {
+    event.NoOfAttendees = event.NoOfAttendees - 1;
+    event
+      .save()
+      .then(() => res.json("RSVP cancelled!"))
+      .catch(err => res.status(400).json("Error : " + err));
+  });
+});
+
 router.route("/:id").get((req, res) => {
   Event.findById(req.params.id)
     .then(Event => res.json(Event))
@@ -68,16 +111,16 @@ router.route("/update/:id").post((req, res) => {
     .then(Event => {
       Event.Name = req.body.Name;
       Event.Contact = Number(req.body.Contact);
-      Event.Date = req.body.Data;
-      Event.Time = req.body.Time;
+      Event.Date = string(req.body.Data);
+      Event.Time = string(req.body.Time);
       Event.Venue = req.body.Venue;
       Event.Duration = Number(req.body.Duration);
       Event.Description = req.body.Description;
-      Event.NoOfAttendees = Number(req.body.NoOfAttendees);
+      //	Event.NoOfAttendees = Number(req.body.NoOfAttendees);
       Event.Approved = false;
 
       var query = ClubCom.findOne(
-        { Name: String(req.body.Organizer) },
+        { UserName: String(req.body.Organizer) },
         { _id: 1 }
       );
       query.exec(function(err, clubcom) {
@@ -91,16 +134,6 @@ router.route("/update/:id").post((req, res) => {
       });
     })
     .catch(err => res.status(400).json("Error: " + err));
-});
-
-router.route("/approve/:id").post((req, res) => {
-  Event.findById(req.params.id).then(Event => {
-    Event.Approved = true;
-
-    Event.save()
-      .then(() => res.json("Event approved!"))
-      .catch(err => res.status(400).json("Error: " + err));
-  });
 });
 
 module.exports = router;

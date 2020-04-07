@@ -1,5 +1,6 @@
 const router = require('express').Router();
 let ClubCom = require('../models/ClubCom.model');
+const bcrypt = require('bcryptjs');
 
 router.route('/').get((req, res) => {
   ClubCom.find()
@@ -7,13 +8,17 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/add').post((req, res) => {
-  const Name = req.body.Name;
+router.route('/register').post((req, res) => {
+  const UserName = req.body.UserName;
+  const Password = bcrypt.hashSync(String(req.body.Password), 10);
+  const Email_ID = req.body.Email_ID;
   const Contact = req.body.Contact;
   const Clg_ID = req.body.Clg_ID;
 
   const newClubCom = new ClubCom({
-	  Name,  
+	  UserName,  
+	  Password,
+	  Email_ID,
 	  Contact, 
       Clg_ID,  
 	});
@@ -25,6 +30,7 @@ router.route('/add').post((req, res) => {
 	
 	
 });
+
 
 
 
@@ -44,7 +50,7 @@ router.route('/update/:id').post((req, res) => {
 		ClubCom.Name = req.body.Name;	
 		ClubCom.Contact = Number(req.body.Contact);
 		ClubCom.Clg_ID = Number(req.body.Clg_ID);
-      
+		ClubCom.Email_ID = req.body.Email_ID;
 	  
       ClubCom.save()
         .then(() => res.json('ClubCom updated!'))

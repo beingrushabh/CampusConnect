@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 const CommentSchema = new Schema({
   Event: { type: Schema.Types.ObjectId, ref: 'Event'},
   Description: { type: String, required: true },
-  User:{type: Schema.Types.ObjectId, ref: 'User'}
+  User:{type: Schema.Types.ObjectId, ref: 'User'},
+  reported: {type: Boolean}
 }, {
   timestamps: true,
 });

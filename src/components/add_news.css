@@ -1,6 +1,6 @@
 img.main {
   /* min-height: 100%;
-  min-width: 1024px; */
+    min-width: 1024px; */
 
   /* Set up proportionate scaling */
   width: 100%;
@@ -12,14 +12,15 @@ img.main {
   left: 0;
   z-index: -1;
 }
-.loginbox {
+.SimpleForm {
+  box-shadow: 2px 3px 8px 1px rgba(255, 255, 255, 0.6) !important;
   width: 500px;
-  height: 550px;
+  height: 350px;
   background: #0d0f10;
   opacity: 0.8;
   background-size: cover;
   color: #fff;
-  top: 55%;
+  top: 45%;
   left: 50%;
   border-radius: 20px;
   position: absolute;
@@ -35,6 +36,7 @@ img.main {
   position: absolute;
   top: -50px;
   left: calc(50% - 50px);
+  box-shadow: 2px 3px 8px 1px rgba(255, 255, 255, 0.6);
 }
 
 h1 {
@@ -44,16 +46,16 @@ h1 {
   font-size: 22px;
 }
 
-.loginbox p[id="age"] {
+.SimpleForm p[id="age"] {
   float: left;
   text-align: left;
 }
-.loginbox p {
+.SimpleForm p {
   margin: 0;
   padding: 0;
   font-weight: bold;
 }
-.loginbox button {
+.SimpleForm button {
   background-color: #4caf50;
   border: none;
   color: white;
@@ -68,23 +70,26 @@ h1 {
 .button1 {
   border-radius: 48px;
 }
-/*.loginbox input[type="radio"] {
-    inline-size: 4rem;
-    float: left;
-    width: 50px;
-    margin-right: 10px;
-  }
-  .loginbox label {
-    float: left;
-    width: 50px;
-  }*/
-.loginbox input {
+/*.SimpleForm input[type="radio"] {
+      inline-size: 4rem;
+      float: left;
+      width: 50px;
+      margin-right: 10px;
+    }
+    .SimpleForm label {
+      float: left;
+      width: 50px;
+    }*/
+.SimpleForm input {
   width: 100%;
   margin-bottom: 20px;
 }
 
-.loginbox input[type="text"],
-input[type="password"] {
+.SimpleForm input[type="text"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+input[type="time"] {
   border: none;
   border-bottom: 1px solid #fff;
   background: transparent;
@@ -93,7 +98,7 @@ input[type="password"] {
   color: #fff;
   font-size: 16px;
 }
-.loginbox input[type="submit"] {
+.SimpleForm input[type="submit"] {
   border: none;
   outline: none;
   height: 40px;
@@ -102,19 +107,19 @@ input[type="password"] {
   font-size: 18px;
   border-radius: 20px;
 }
-.loginbox input[type="submit"]:hover {
+.SimpleForm input[type="submit"]:hover {
   cursor: pointer;
   background: #ffc107;
   color: #000;
 }
-.loginbox a {
+.SimpleForm a {
   text-decoration: none;
   font-size: 12px;
   line-height: 20px;
   color: darkgrey;
 }
 
-.loginbox a:hover {
+.SimpleForm a:hover {
   color: #ffc107;
 }
 

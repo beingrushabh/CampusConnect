@@ -154,7 +154,7 @@ export class Admin_dashboard extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+      .get("/User/isLoggedIn", { withCredentials: true })
       .then((response) => {
         this.setState({
           userdetails: response.data,

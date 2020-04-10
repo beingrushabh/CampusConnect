@@ -3,6 +3,7 @@ import "./login/login.css";
 import { NavLink } from "react-router-dom";
 import { browserHistory, Router, Route, Redirect } from "react-router";
 import axios from "axios";
+import queryString from "query-string";
 // import checkAuthentication from ".../backend/auth/protect.js";
 
 class PopLogin extends Component {
@@ -60,7 +61,18 @@ class PopLogin extends Component {
       username: this.state.user,
       password: this.state.password,
     };
+    const api = axios.create({
+      withCredentials: true,
+    });
 
+    // axios("http://localhost:5000/User/login", {
+    //   method: "post",
+    //   data: user,
+    //   withCredentials: true,
+    // })
+    const axiosConfig = {
+      withCredentials: true,
+    };
     axios
       .post("http://localhost:5000/User/login", user)
       .then((res) => {
@@ -74,7 +86,7 @@ class PopLogin extends Component {
       .catch((error1) =>
         this.setState({
           error: true,
-          errormsg: error1.response.data,
+          errormsg: error1.response,
           loggedin: false,
         })
       );

@@ -12,8 +12,9 @@
   justify-content: center;
 }
 
-.event-back {
+.news-back {
   display: flex;
   flex-direction: row;
   height: 100vh;
+  overflow-y: scroll !important;
 }

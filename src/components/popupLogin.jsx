@@ -1,19 +1,41 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import "./login/login.css";
 import { NavLink } from "react-router-dom";
 import { browserHistory, Router, Route, Redirect } from "react-router";
 import axios from "axios";
+// import checkAuthentication from ".../backend/auth/protect.js";
+
 class PopLogin extends Component {
   state = {
     // submit1: false
     user: "default",
     password: "default",
     link: "/DashBoard",
-    loggedin: false
+    loggedin: false,
+    errormsg: "default",
+    error: false,
+    userdetails: [],
+    isorganizer: false,
   };
 
   componentDidUpdate(prevprops, prevstate) {
+    if (prevstate.userdetails != this.state.userdetails) {
+      this.setState({
+        loggedin: true,
+      });
+    }
     if (prevstate.loggedin != this.state.loggedin) {
+      axios
+        .get("http://localhost:5000/User/isLoggedIn")
+        .then((res) => console.log("heyy you", res));
+
+      axios
+        .get(`http://localhost:5000/ClubCom/find/${this.state.userdetails._id}`)
+        .then((res) =>
+          this.setState({
+            isorganizer: true,
+          })
+        );
     }
   }
 
@@ -22,12 +44,12 @@ class PopLogin extends Component {
     this.submit = this.submit.bind(this);
   }
 
-  inputuser = event => {
+  inputuser = (event) => {
     this.setState({ user: event.target.value });
     console.log(this.state.user);
   };
 
-  inputpassword = event => {
+  inputpassword = (event) => {
     this.setState({ password: event.target.value });
   };
 
@@ -35,34 +57,52 @@ class PopLogin extends Component {
     e.preventDefault();
 
     const user = {
-      UserName: this.state.user,
-      Password: this.state.password
+      username: this.state.user,
+      password: this.state.password,
     };
 
-    axios.post("http://localhost:5000/User/login", user).then(
-      res => console.log(res.data),
-      this.setState({
-        loggedin: true
+    axios
+      .post("http://localhost:5000/User/login", user)
+      .then((res) => {
+        console.log("res here : ", res.data);
+        this.setState({
+          error: false,
+          userdetails: res.data,
+        });
+        console.log(this.state.userdetails);
       })
-    );
+      .catch((error1) =>
+        this.setState({
+          error: true,
+          errormsg: error1.response.data,
+          loggedin: false,
+        })
+      );
   }
 
   render() {
-    if (this.state.loggedin) {
-      console.log("loggenin");
+    if (this.state.loggedin && this.state.userdetails != []) {
+      console.log("loggenin", this.state.userdetails);
       if (this.state.user == "admin") {
         return (
           <Redirect
             to={{
               pathname: "/Admin_dashboard",
-              state: { UserName: this.state.user }
+              state: { userdetails: this.state.userdetails },
             }}
           />
         );
       } else if (this.state.user == "placementofficer") {
         return <Redirect to="/PlacementOfficer" />;
-      } else {
-        return <Redirect to="/" />;
+      } else if (this.state.isorganizer) {
+        return (
+          <Redirect
+            to={{
+              pathname: "/organizer",
+              state: { Userdetails: this.state.userdetails },
+            }}
+          />
+        );
       }
     }
     return (
@@ -70,6 +110,9 @@ class PopLogin extends Component {
         <div className="col-lg-4 loginbox1">
           <h1 style={{ fontSize: "35px" }}>Login Here</h1>
           <form onSubmit={this.submit}>
+            <div style={{ color: "red" }}>
+              {this.state.error ? this.state.errormsg : null}
+            </div>
             <input
               type="text"
               name="username"
@@ -89,12 +132,7 @@ class PopLogin extends Component {
               className="form-group"
             />
 
-            <button
-              onClick={this.props.closepopup}
-              className=" form-group loginsubmit"
-            >
-              submit
-            </button>
+            <button className="form-group loginsubmit">submit</button>
             <a href="">Forgot Password?</a>
             <br />
           </form>

@@ -5,15 +5,16 @@ import axios from "axios";
 class News_structure extends Component {
   state = {
     Remove: false,
-    key: this.props.id
+    key: this.props.id,
   };
 
   componentDidUpdate(prevprops, prevstate) {
     if (prevstate.Remove != this.state.Remove) {
       console.log(this.state.key);
       axios
-        .get(`https://localhost:5000/News/${this.state.key}`)
-        .then(Response => {
+        .delete(`https://localhost:5000/News/${this.state.key}`)
+        .then((res) => {
+          console.log(res.data);
           this.props.refresh();
         });
     }
@@ -32,7 +33,7 @@ class News_structure extends Component {
                 class="btn remove btn-danger"
                 onClick={() => {
                   this.setState({
-                    Remove: true
+                    Remove: true,
                   });
                 }}
               >

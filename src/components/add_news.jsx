@@ -15,7 +15,7 @@ class AddNews extends Component {
   state = {
     Title: "default",
     Date: 1234,
-    Description: "default"
+    Description: "default",
   };
 
   constructor(props) {
@@ -30,13 +30,11 @@ class AddNews extends Component {
     const finalObject = {
       Title: this.state.Title,
       Date: this.state.Date,
-      Description: this.state.Description
+      Description: this.state.Description,
     };
     console.log(finalObject);
-    axios.post("http://localhost:5000/News/add", finalObject).then(res => {
-      console.log(res.message);
-
-      this.props.closePopup();
+    axios.post("http://localhost:5000/News/add", finalObject).then((res) => {
+      return this.props.closePopup();
     });
   }
 
@@ -49,7 +47,7 @@ class AddNews extends Component {
             {/* <img src={userlogo} className="user" /> */}
             <h1>Add News</h1>
 
-            <form onSubmit={this.submit} Method="POST">
+            <form onSubmit={this.submit}>
               <div className="container">
                 <div className="row">
                   <div className="col-lg-6">
@@ -59,9 +57,9 @@ class AddNews extends Component {
                       name="Title"
                       placeholder="Title"
                       required
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Title: event.target.value
+                          Title: event.target.value,
                         });
                       }}
                       className="form-group"
@@ -74,9 +72,9 @@ class AddNews extends Component {
                       placeholder="Date"
                       required
                       name="Date"
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Date: event.target.value
+                          Date: event.target.value,
                         });
                       }}
                       className="form-group"
@@ -91,9 +89,9 @@ class AddNews extends Component {
                   name="Description"
                   placeholder="Description"
                   required
-                  onChange={event => {
+                  onChange={(event) => {
                     this.setState({
-                      Description: event.target.value
+                      Description: event.target.value,
                     });
                   }}
                 />

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./event_structure.css";
 import axios from "axios";
 import { browserHistory, Router, Route, Redirect, history } from "react-router";
+import { NavLink } from "react-router-dom";
 
 // function approve(id, request) {
 //   if (request) {
@@ -14,12 +15,12 @@ import { browserHistory, Router, Route, Redirect, history } from "react-router";
 
 class Event_structure extends Component {
   state = {
-    id: this.props.id,
+    id: this.props.key,
     request: false,
     temp: false,
     organizer: this.props.organizer,
     organizerD: [],
-    organizer1: "default"
+    organizer1: "default",
   };
   // componentDidMount() {
 
@@ -40,21 +41,22 @@ class Event_structure extends Component {
   componentDidUpdate(prevProp, PrevState) {
     if (PrevState.request != this.state.request) {
       const url = `http://localhost:5000/Event/approve/${this.state.id}`;
-      axios.post(url).then(Response => this.props.refresh());
+      axios.post(url).then((Response) => this.props.refresh());
       return true;
     }
   }
 
   updateOrganizer(event) {
     this.setState({
-      organizer1: event
+      organizer1: event,
     });
   }
 
   componentDidMount() {
+    console.log(this.props.key);
     axios
       .get(`http://localhost:5000/ClubCom/${this.state.organizer}`)
-      .then(Response => {
+      .then((Response) => {
         this.state.organizerD = Response.data;
         this.updateOrganizer(this.state.organizerD.Name);
       });
@@ -81,8 +83,17 @@ class Event_structure extends Component {
               <span className="textclr"> Time : {this.props.time}</span>
             </div>
             <div className="info">{this.props.description}</div>
-            <button className="more-info">More Info >></button>
-
+            <NavLink
+              to={{
+                pathname: "/Event_more",
+                state: {
+                  id: this.state.id,
+                  organizer: this.state.organizerD.name,
+                },
+              }}
+            >
+              <button className="more-info">More Info >></button>
+            </NavLink>
             {this.props.status && (
               <button className="RSVP">I'm interested</button>
             )}
@@ -92,7 +103,7 @@ class Event_structure extends Component {
                 href="/Admin_dashboard"
                 onClick={() => {
                   this.setState({
-                    request: true
+                    request: true,
                   });
 
                   // this.requestApprove(this.state.id);

@@ -6,10 +6,10 @@ const NewsSchema = new Schema(
   {
     Title: { type: String, required: true },
     Date: { type: String, required: true },
-    Description: { type: String, required: true }
+    Description: { type: String, required: true },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

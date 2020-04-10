@@ -16,6 +16,8 @@ import News_list from "./news_list";
 import AddNews from "./add_news";
 import UserForm from "./UserForm";
 import PopLogin from "./popupLogin";
+import axios from "axios";
+import Organizer_Events from "./organizer_event_list";
 
 export class DashBoard extends Component {
   state = {
@@ -25,7 +27,7 @@ export class DashBoard extends Component {
     toggle_form: "Request Event",
     login: false,
     login_btn: "Login",
-    topple_login: false
+    topple_login: false,
   };
   constructor(props) {
     super(props);
@@ -36,7 +38,7 @@ export class DashBoard extends Component {
 
   toggleLogin() {
     this.setState({
-      topple_login: !this.state.toggle_login
+      topple_login: !this.state.toggle_login,
     });
   }
 
@@ -97,25 +99,70 @@ export class DashBoard extends Component {
 
 export class Admin_dashboard extends Component {
   state = {
-    user: "ADMIN",
     news: false,
-    adduser: false
+    adduser: false,
+    logoutstate: false,
+    // userdetails: this.props.location.state.userdetails,
+    userdetails: [],
+    eventbtn: "Pending Events",
   };
 
   toggleNews() {
     this.setState({
-      news: !this.state.news
+      news: !this.state.news,
     });
+  }
+
+  toggleeventbtn() {
+    if (this.state.eventbtn == "Pending Events") {
+      this.setState({
+        eventbtn: "All Events",
+      });
+    } else {
+      this.setState({
+        eventbtn: "Pending Events",
+      });
+    }
   }
 
   toggleUser() {
     this.setState({
-      adduser: !this.state.adduser
+      adduser: !this.state.adduser,
     });
   }
   constructor(props) {
     super(props);
   }
+
+  logout() {
+    this.setState({
+      logoutstate: true,
+    });
+  }
+
+  componentDidUpdate(prevprops, prevstate) {
+    if (prevstate.logoutstate != this.state.logoutstate) {
+      const user = {
+        username: this.state.userdetails.username,
+      };
+      console.log(user);
+      axios
+        .post("https://localhost:5000/User/logout", user)
+        .then((res) => console.log(res));
+    }
+  }
+
+  componentDidMount() {
+    axios
+      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+      .then((response) => {
+        this.setState({
+          userdetails: response.data,
+        });
+        console.log("loggedin user: ", response);
+      });
+  }
+
   AddUser() {}
   render() {
     return (
@@ -126,9 +173,16 @@ export class Admin_dashboard extends Component {
               <h2> Campus Connect</h2>
             </NavLink>
 
-            <div className="col-lg-5"></div>
+            <div className="col-lg-3"></div>
             <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
+                <a
+                  class="nav-item nav-link"
+                  onClick={this.toggleeventbtn.bind(this)}
+                >
+                  {this.state.eventbtn}
+                </a>
+
                 <a
                   class="nav-item nav-link"
                   onClick={this.toggleNews.bind(this)}
@@ -142,18 +196,25 @@ export class Admin_dashboard extends Component {
                   Add User
                 </a>
                 <a class="nav-item nav-link" href="#">
-                  {this.state.user}
+                  {this.state.userdetails.username}
                 </a>
-                <NavLink to="/" class="nav-item nav-link " tabindex="-1">
+                {/* <NavLink to="/" class="nav-item nav-link " tabindex="-1"> */}
+                <a class="nav-item nav-link" onClick={this.logout.bind(this)}>
+                  {" "}
                   Log Out
-                </NavLink>
+                </a>
+                {/* </NavLink> */}
               </div>
             </div>
           </nav>
         </div>
         <div className="container row">
           <div className="col-lg-8 col-md-8 col-sm-12">
-            <Admin_Events />
+            {this.state.eventbtn == "All Events" ? (
+              <Admin_Events />
+            ) : (
+              <Events />
+            )}
           </div>
           <div className="col-lg-4 col-md-4 col-sm-12">
             <News_list showRemove={true} />
@@ -176,18 +237,34 @@ export class Organizer_dashboard extends Component {
   state = {
     user: "",
     news: false,
-    adduser: false
+    adduser: false,
+    logoutstate: false,
+    userdetails: this.props.userdetails,
   };
+
+  logout() {
+    this.setState({
+      logoutstate: true,
+    });
+  }
+
+  componentDidUpdate(prevprops, prevstate) {
+    if (prevstate.logoutstate != this.state.logoutstate) {
+      axios
+        .get("https://localhost:5000/User/logout")
+        .then((res) => console.log(res));
+    }
+  }
 
   toggleNews() {
     this.setState({
-      news: !this.state.news
+      news: !this.state.news,
     });
   }
 
   toggleUser() {
     this.setState({
-      adduser: !this.state.adduser
+      adduser: !this.state.adduser,
     });
   }
   constructor(props) {
@@ -221,16 +298,16 @@ export class Organizer_dashboard extends Component {
                 <a class="nav-item nav-link" href="#">
                   {this.state.user}
                 </a>
-                <NavLink to="/" class="nav-item nav-link " tabindex="-1">
-                  Log Out
-                </NavLink>
+                {/* <NavLink to="/" class="nav-item nav-link " tabindex="-1"> */}
+                <button onClick={this.logout.bind(this)}> Log Out</button>
+                {/* </NavLink> */}
               </div>
             </div>
           </nav>
         </div>
         <div className="container row">
           <div className="col-lg-8 col-md-8 col-sm-12">
-            <Admin_Events />
+            <Organizer_Events userdetails={this.state.userdetails} />
           </div>
           <div className="col-lg-4 col-md-4 col-sm-12">
             <News_list showRemove={true} />

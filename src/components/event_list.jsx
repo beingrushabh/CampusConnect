@@ -18,7 +18,7 @@ class Events extends Component {
     filterText: "",
     filteradded: false,
     url: "http://localhost:5000/Event/",
-    urlcom: "http://localhost:5000/ClubCom/"
+    urlcom: "http://localhost:5000/ClubCom/",
   };
 
   constructor(props) {
@@ -28,15 +28,15 @@ class Events extends Component {
 
   componentDidMount() {
     console.log("fetch");
-    axios.get(this.state.url).then(Response => {
+    axios.get(this.state.url).then((Response) => {
       this.state.EventD = Response.data;
       console.log(this.state.EventD);
       this.setState({
-        updated: true
+        updated: true,
       });
     });
 
-    axios.get(this.state.urlCom).then(Response => {
+    axios.get(this.state.urlCom).then((Response) => {
       this.state.ComD = Response.data;
       console.log(this.state.ComD);
     });
@@ -44,7 +44,7 @@ class Events extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.url !== this.state.url) {
-      axios.get(this.state.url).then(Response => {
+      axios.get(this.state.url).then((Response) => {
         this.state.EventD = Response.data;
         console.log(this.state.EventD);
       });
@@ -56,7 +56,7 @@ class Events extends Component {
       this.setState({
         filteradded: false,
 
-        url: `http://localhost:5000/Event/filterBy/${event}`
+        url: `http://localhost:5000/Event/filterBy/${event}`,
       });
     }
   }
@@ -65,7 +65,7 @@ class Events extends Component {
     if (this.state.updated) {
       console.log(this.state.EventD);
     }
-    const EventList = this.state.EventD.map(data => {
+    const EventList = this.state.EventD.map((data) => {
       return (
         <Event_structure
           key={data._id}
@@ -119,7 +119,7 @@ class Events extends Component {
                       class="dropdown-item "
                       onClick={() => {
                         this.setState({
-                          filteradded: true
+                          filteradded: true,
                         });
                         return this.addFilter("Debate Club");
                       }}
@@ -132,7 +132,7 @@ class Events extends Component {
                       class="dropdown-item "
                       onClick={() => {
                         this.setState({
-                          filteradded: true
+                          filteradded: true,
                         });
                         return this.addFilter("Khelaiya Club");
                       }}

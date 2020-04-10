@@ -8,7 +8,7 @@ class News_list extends Component {
   state = {
     NewsD: [],
     refreshtoken: false,
-    updated: false
+    updated: false,
   };
 
   constructor(props) {
@@ -22,7 +22,7 @@ class News_list extends Component {
 
   componentDidUpdate(prevprops, prevstate) {
     if (prevstate.refresh != this.state.refresh) {
-      axios.get("http://localhost:5000/News/").then(Response => {
+      axios.get("http://localhost:5000/News/").then((Response) => {
         this.state.NewsD = Response.data;
         console.log(this.state.NewsD);
       });
@@ -31,11 +31,11 @@ class News_list extends Component {
 
   componentDidMount() {
     console.log("fetch");
-    axios.get("http://localhost:5000/News/").then(Response => {
+    axios.get("http://localhost:5000/News/").then((Response) => {
       this.state.NewsD = Response.data;
       console.log(this.state.NewsD);
       this.setState({
-        updated: true
+        updated: true,
       });
     });
   }
@@ -43,7 +43,7 @@ class News_list extends Component {
     if (this.state.updated) {
       console.log(this.state.NewsD);
     }
-    const NewsList = this.state.NewsD.map(data => {
+    const NewsList = this.state.NewsD.map((data) => {
       return (
         <News_structure
           id={data._id}
@@ -60,7 +60,7 @@ class News_list extends Component {
         <div className="header">
           <h1 style={{ color: "black", fontSize: "30px" }}>News</h1>
         </div>
-        <div className="event-back">
+        <div className="news-back">
           <div className="event-list">{NewsList}</div>
         </div>
       </div>

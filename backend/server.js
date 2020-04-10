@@ -1,11 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const session = require('express-session')
+//const bcrypt = require('bcryptjs');
+//let User = require('../backend/models/User.model')
+const MongoStore = require('connect-mongo')(session)
 
 require('dotenv').config();
 
 const app = express();
+
+const passport = require('passport')
+const setupPassport = require('./auth/passport')
+//const checkAuthenticated = require('./auth/protect')
 const port = process.env.PORT || 5000;
 
 app.use(cors());
@@ -18,6 +25,17 @@ const connection = mongoose.connection;
 connection.once('open', () => {
   console.log(`MongoDB database connection established successfully`);
 })
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  store: new MongoStore({mongooseConnection: connection}),
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+setupPassport(passport);
+
 
 const eventRouter = require('./routes/Event');
 const ClubComRouter = require('./routes/ClubCom');

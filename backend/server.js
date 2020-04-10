@@ -15,12 +15,32 @@ const app = express();
 //   next();
 // });
 
+var whitelist = ["http://localhost:3000", "http://localhost:5000"];
+var corsOptions = {
+  credentials: true,
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+// app.get('/products/:id', cors(corsOptions), function (req, res, next) {
+//   res.json({msg: 'This is CORS-enabled for a whitelisted domain.'})
+// })
+
+// app.listen(80, function () {
+//   console.log('CORS-enabled web server listening on port 80')
+// })
+
 const passport = require("passport");
 const setupPassport = require("./auth/passport");
 //const checkAuthenticated = require('./auth/protect')
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
@@ -34,7 +54,13 @@ connection.once("open", () => {
   console.log(`MongoDB database connection established successfully`);
 });
 
-// app.get("/User/isLoggedIn", function (req, res, next) {
+// app.use((req,res,next()) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Header", "*");
+//   )
+// })
+// // app.get("/User/isLoggedIn", function (req, res, next) {
 //   res.json({ msg: "This is CORS-enabled for all origins!" });
 // });
 

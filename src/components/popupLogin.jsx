@@ -3,7 +3,6 @@ import "./login/login.css";
 import { NavLink } from "react-router-dom";
 import { browserHistory, Router, Route, Redirect } from "react-router";
 import axios from "axios";
-import queryString from "query-string";
 // import checkAuthentication from ".../backend/auth/protect.js";
 
 class PopLogin extends Component {
@@ -24,11 +23,16 @@ class PopLogin extends Component {
       this.setState({
         loggedin: true,
       });
-    }
-    if (prevstate.loggedin != this.state.loggedin) {
-      axios
-        .get("http://localhost:5000/User/isLoggedIn")
-        .then((res) => console.log("heyy you", res));
+
+      // if (prevstate.userdetails != this.state.userdetails) {
+      //   axios.get("/User/isLoggedIn", { withCredentials: true }).then((res) => {
+      //     console.log("heyy you", res);
+      //     if (res.data.user != null) {
+      //       this.setState({
+      //         loggedin: true,
+      //       });
+      //     }
+      //   });
 
       axios
         .get(`http://localhost:5000/ClubCom/find/${this.state.userdetails._id}`)
@@ -61,20 +65,12 @@ class PopLogin extends Component {
       username: this.state.user,
       password: this.state.password,
     };
-    const api = axios.create({
-      withCredentials: true,
-    });
 
-    // axios("http://localhost:5000/User/login", {
-    //   method: "post",
-    //   data: user,
-    //   withCredentials: true,
-    // })
-    const axiosConfig = {
+    axios("http://localhost:5000/User/login", {
+      method: "post",
+      data: user,
       withCredentials: true,
-    };
-    axios
-      .post("http://localhost:5000/User/login", user)
+    })
       .then((res) => {
         console.log("res here : ", res.data);
         this.setState({
@@ -83,13 +79,14 @@ class PopLogin extends Component {
         });
         console.log(this.state.userdetails);
       })
-      .catch((error1) =>
+      .catch((error1) => {
+        console.log(error1.response);
         this.setState({
           error: true,
-          errormsg: error1.response,
+          errormsg: error1.response.data,
           loggedin: false,
-        })
-      );
+        });
+      });
   }
 
   render() {

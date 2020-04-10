@@ -7,7 +7,7 @@ import Add_events from "./add_events";
 import Events from "./event_list";
 import "bootstrap/dist/css/bootstrap.css";
 import Admin_Events from "./admin_event_list";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 import loginPop from "./popupLogin";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
@@ -105,6 +105,7 @@ export class Admin_dashboard extends Component {
     // userdetails: this.props.location.state.userdetails,
     userdetails: [],
     eventbtn: "Pending Events",
+    loggedout: false,
   };
 
   toggleNews() {
@@ -147,17 +148,24 @@ export class Admin_dashboard extends Component {
       };
       console.log(user);
       axios
-        .post("https://localhost:5000/User/logout", user)
-        .then((res) => console.log(res));
+        .post("http://localhost:5000/User/logout", user, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
+          this.setState({
+            loggedout: true,
+          });
+        });
     }
   }
-
+  //
   componentDidMount() {
     axios
-      .get("/User/isLoggedIn", { withCredentials: true })
+      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
       .then((response) => {
         this.setState({
-          userdetails: response.data,
+          userdetails: response.data.user,
         });
         console.log("loggedin user: ", response);
       });
@@ -165,6 +173,10 @@ export class Admin_dashboard extends Component {
 
   AddUser() {}
   render() {
+    if (this.state.loggedout) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <div>
         <div className="brand">

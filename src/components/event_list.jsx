@@ -23,7 +23,6 @@ class Events extends Component {
 
   constructor(props) {
     super(props);
-    this.addFilter = this.addFilter.bind(this);
   }
 
   componentDidMount() {
@@ -43,20 +42,15 @@ class Events extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.url !== this.state.url) {
+    if (prevState.filterText != this.state.filterText) {
+      this.setState({
+        url: `http://localhost:5000/Event/filterBy/${this.state.filterText}`,
+      });
+    }
+    if (prevState.url != this.state.url) {
       axios.get(this.state.url).then((Response) => {
         this.state.EventD = Response.data;
         console.log("EventD", this.state.EventD);
-      });
-    }
-  }
-
-  addFilter(event) {
-    if (this.state.filteradded) {
-      this.setState({
-        filteradded: false,
-
-        url: `http://localhost:5000/Event/filterBy/${event}`,
       });
     }
   }
@@ -120,9 +114,8 @@ class Events extends Component {
                       class="dropdown-item "
                       onClick={() => {
                         this.setState({
-                          filteradded: true,
+                          filterText: "Debate Club",
                         });
-                        return this.addFilter("Debate Club");
                       }}
                     >
                       Debate Club

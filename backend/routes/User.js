@@ -14,8 +14,8 @@ router.route("/register").post((req, res) => {
   const username = req.body.username;
   const password = bcrypt.hashSync(req.body.password, 10);
   const Email_ID = req.body.Email_ID;
-  const FirstName = req.body.FirstName;
-  const LastName = req.body.LastName;
+  const Name = req.body.Name;
+  const Contact = req.body.Contact;
   const Gender = req.body.Gender;
   const Age = req.body.Age;
   const Address = req.body.Address;
@@ -26,8 +26,8 @@ router.route("/register").post((req, res) => {
     username,
     password,
     Email_ID,
-    FirstName,
-    LastName,
+    Name,
+    Contact,
     Gender,
     Age,
     Address,
@@ -135,8 +135,8 @@ router.route("/update/:id").post(async (req, res) => {
       User.username = req.body.username;
       //User.password = Bcrypt.hashSync(req.body.password, 10);
       User.Email_ID = req.body.Email_ID;
-      User.FirstName = req.body.FirstName;
-      User.LastName = req.body.LastName;
+      User.Name = req.body.Name;
+      User.Contact = req.body.Contact;
       User.Gender = req.body.Gender;
       User.Age = req.body.Age;
       User.Address = req.body.Address;

@@ -15,12 +15,12 @@ img.main {
 .SimpleForm {
   box-shadow: 2px 3px 8px 1px rgba(255, 255, 255, 0.6) !important;
   width: 500px;
-  height: 500px;
+  height: 500px !important;
   background: #0d0f10;
   opacity: 0.8;
   background-size: cover;
   color: #fff;
-  top: 55%;
+  top: 55% !important;
   left: 50%;
   border-radius: 20px;
   position: absolute;
@@ -31,7 +31,7 @@ img.main {
 
 .user {
   width: 100px;
-  height: 100px;
+  height: 300px;
   border-radius: 50%;
   position: absolute;
   top: -50px;
@@ -125,4 +125,16 @@ input[type="time"] {
 
 .container {
   max-width: 1400px !important;
+}
+.popup {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  backdrop-filter: blur(2px);
+  background-color: rgba(255, 255, 255, 0.5);
 }

@@ -21,7 +21,8 @@ class SimpleForm extends Component {
     Duration: 123,
     Description: "default",
     Contact: "123456789",
-    NoOfAttendees: 2345
+    NoOfAttendees: 2345,
+    userdetails: [],
   };
 
   constructor(props) {
@@ -29,31 +30,45 @@ class SimpleForm extends Component {
     this.submit = this.submit.bind(this);
   }
 
+  componentDidMount() {
+    axios
+      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+      .then((res) => {
+        console.log("simple form user", res);
+        if (res.data.user != null) {
+          this.setState({
+            userdetails: res.data.user,
+          });
+        }
+      });
+  }
+
   submit(e) {
     e.preventDefault();
 
     const finalObject = {
       Name: this.state.EventName,
-      Organizer: this.state.Organizer,
+      Organizer: this.state.userdetails.username,
       Contact: this.state.Contact,
       Date: this.state.Date,
       Time: this.state.Time,
       Venue: this.state.Venue,
       Duration: this.state.Duration,
       NoOfAttendees: this.state.NoOfAttendees,
-      Description: this.state.Description
+      Description: this.state.Description,
     };
 
-    axios
-      .post("http://localhost:5000/Event/add", finalObject)
-      .then(res => console.log(res.message));
+    axios.post("http://localhost:5000/Event/add", finalObject).then((res) => {
+      console.log(res.message);
+      this.props.closePopup();
+    });
   }
 
   render() {
     return (
       <React.Fragment>
         {/* <img src={background} className="main" /> */}
-        <div className="main">
+        <div className="main popup">
           <div className="SimpleForm">
             {/* <img src={userlogo} className="user" /> */}
             <h1>Request Event </h1>
@@ -68,9 +83,9 @@ class SimpleForm extends Component {
                       name="EventName"
                       placeholder="Event Name"
                       required
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          EventName: event.target.value
+                          EventName: event.target.value,
                         });
                       }}
                       className="form-group"
@@ -78,17 +93,7 @@ class SimpleForm extends Component {
                   </div>
                   <div className="col-lg-6">
                     {/* <p>Password :</p> */}
-                    <input
-                      type="text"
-                      placeholder="Organizer"
-                      required
-                      onChange={event => {
-                        this.setState({
-                          Organizer: event.target.value
-                        });
-                      }}
-                      className="form-group"
-                    />
+                    <label>Organizer: {this.state.userdetails.username}</label>
                   </div>
                 </div>
 
@@ -101,9 +106,9 @@ class SimpleForm extends Component {
                       placeholder="Venue"
                       required
                       className="form-group"
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          FirstName: event.target.value
+                          FirstName: event.target.value,
                         });
                       }}
                     />
@@ -116,9 +121,9 @@ class SimpleForm extends Component {
                       placeholder="Duration"
                       required
                       className="form-group"
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Duration: event.target.value
+                          Duration: event.target.value,
                         });
                       }}
                     />
@@ -133,9 +138,9 @@ class SimpleForm extends Component {
                       placeholder="Date"
                       required
                       className="form-group"
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Date: event.target.value
+                          Date: event.target.value,
                         });
                       }}
                     />
@@ -148,9 +153,9 @@ class SimpleForm extends Component {
                       placeholder="Time"
                       required
                       className="form-group"
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Time: event.target.value
+                          Time: event.target.value,
                         });
                       }}
                     />
@@ -167,9 +172,9 @@ class SimpleForm extends Component {
                       placeholder="Contact"
                       required
                       className="form-group"
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Contact: event.target.value
+                          Contact: event.target.value,
                         });
                       }}
                     />
@@ -182,9 +187,9 @@ class SimpleForm extends Component {
                       placeholder="Number of Attendees"
                       required
                       className="form-group"
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          NoOfAttendees: event.target.value
+                          NoOfAttendees: event.target.value,
                         });
                       }}
                     />
@@ -200,9 +205,9 @@ class SimpleForm extends Component {
                   name="Description"
                   placeholder="Description"
                   required
-                  onChange={event => {
+                  onChange={(event) => {
                     this.setState({
-                      Description: event.target.value
+                      Description: event.target.value,
                     });
                   }}
                 />

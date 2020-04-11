@@ -5,6 +5,7 @@ import {
   DashBoard,
   Admin_dashboard,
   Organizer_dashboard,
+  Student_DashBoard,
 } from "./components/DashBoard";
 import Add_events from "./components/add_events";
 import UserForm from "./components/UserForm";
@@ -45,6 +46,7 @@ class LoginPage extends Component {
             <Route path="/Event_more" component={Event_more} />
             <Route path="/UserForm" component={UserForm} />
             <Route path="/Admin_dashboard" component={Admin_dashboard} />
+            <Route path="/student" component={Student_DashBoard} />
             <Route path="/organizer" component={Organizer_dashboard} />
             <Route path="/PlacementUpdates" component={Placement_updates} />
             <Route path="/PlacementOfficer" component={Placement_officer} />

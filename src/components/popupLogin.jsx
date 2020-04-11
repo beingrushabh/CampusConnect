@@ -19,20 +19,22 @@ class PopLogin extends Component {
   };
 
   componentDidUpdate(prevprops, prevstate) {
-    if (prevstate.userdetails != this.state.userdetails) {
-      this.setState({
-        loggedin: true,
-      });
+    // if (prevstate.userdetails != this.state.userdetails) {
+    //   this.setState({
+    //     loggedin: true,
+    //   });
 
-      // if (prevstate.userdetails != this.state.userdetails) {
-      //   axios.get("/User/isLoggedIn", { withCredentials: true }).then((res) => {
-      //     console.log("heyy you", res);
-      //     if (res.data.user != null) {
-      //       this.setState({
-      //         loggedin: true,
-      //       });
-      //     }
-      //   });
+    if (prevstate.userdetails != this.state.userdetails) {
+      axios
+        .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+        .then((res) => {
+          console.log("heyy you", res);
+          if (res.data.user != null) {
+            this.setState({
+              loggedin: true,
+            });
+          }
+        });
 
       axios
         .get(`http://localhost:5000/ClubCom/find/${this.state.userdetails._id}`)
@@ -103,15 +105,16 @@ class PopLogin extends Component {
         );
       } else if (this.state.user == "placementofficer") {
         return <Redirect to="/PlacementOfficer" />;
-      } else if (this.state.isorganizer) {
+      } else if (this.state.userdetails.UserType == "ClubCom") {
         return (
           <Redirect
             to={{
               pathname: "/organizer",
-              state: { Userdetails: this.state.userdetails },
             }}
           />
         );
+      } else {
+        return <Redirect to="/student" />;
       }
     }
     return (

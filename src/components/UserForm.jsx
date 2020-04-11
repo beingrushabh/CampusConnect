@@ -16,13 +16,13 @@ import "reactjs-toastr/lib/toast.css";
 
 class UserForm extends Component {
   state = {
-    UserName: "default",
-    Password: "default",
+    username: "default",
+    password: "default",
     Email_ID: "default@default.com",
-    FirstName: "default",
-    LastName: "default",
+    Name: "default",
+    contact: "default",
     Gender: "Male",
-    UserType: "Student",
+    UserType: "student",
     Age: 4,
     Address: "default",
     Clg_ID: "201701001",
@@ -38,17 +38,18 @@ class UserForm extends Component {
     e.preventDefault();
 
     const finalObject = {
-      username: this.state.UserName,
+      username: this.state.username,
       password: this.state.password,
       Email_ID: this.state.Email_ID,
-      FirstName: this.state.FirstName,
-      LastName: this.state.LastName,
+      Name: this.state.Name,
+      Contact: this.state.contact,
       Gender: this.state.Gender,
       Age: this.state.Age,
       Address: this.state.Address,
       Clg_ID: this.state.Clg_ID,
     };
 
+    console.log(finalObject);
     if (this.state.UserType == "student") {
       axios
         .post("http://localhost:5000/User/register", finalObject)
@@ -121,7 +122,7 @@ class UserForm extends Component {
                       required
                       onChange={(event) => {
                         this.setState({
-                          UserName: event.target.value,
+                          username: event.target.value,
                         });
                       }}
                       className="form-group"
@@ -130,13 +131,12 @@ class UserForm extends Component {
                   <div className="col-lg-6">
                     {/* <p>Password :</p> */}
                     <input
-                      pattern=".{8,}"
                       type="password"
                       placeholder="Enter Password"
                       required
                       onChange={(event) => {
                         this.setState({
-                          Password: event.target.value,
+                          password: event.target.value,
                         });
                       }}
                       className="form-group"
@@ -165,13 +165,13 @@ class UserForm extends Component {
                     {/* <p>First Name :</p> */}
                     <input
                       type="text"
-                      name="fname"
-                      placeholder="Enter First Name"
+                      name="name"
+                      placeholder="Enter Name"
                       required
                       className="form-group"
                       onChange={(event) => {
                         this.setState({
-                          FirstName: event.target.value,
+                          Name: event.target.value,
                         });
                       }}
                     />
@@ -180,12 +180,12 @@ class UserForm extends Component {
                     {/* <p>Last Name :</p> */}
                     <input
                       type="text"
-                      name="lname"
-                      placeholder="Enter Last Name"
+                      name="Contact"
+                      placeholder="Enter Contact"
                       required
                       onChange={(event) => {
                         this.setState({
-                          LastName: event.target.value,
+                          contact: event.target.value,
                         });
                       }}
                     />

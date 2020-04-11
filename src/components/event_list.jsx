@@ -30,7 +30,7 @@ class Events extends Component {
     console.log("fetch");
     axios.get(this.state.url).then((Response) => {
       this.state.EventD = Response.data;
-      console.log(this.state.EventD);
+      console.log("EDM", this.state.EventD);
       this.setState({
         updated: true,
       });
@@ -38,7 +38,7 @@ class Events extends Component {
 
     axios.get(this.state.urlCom).then((Response) => {
       this.state.ComD = Response.data;
-      console.log(this.state.ComD);
+      console.log("comD", this.state.ComD);
     });
   }
 
@@ -46,7 +46,7 @@ class Events extends Component {
     if (prevState.url !== this.state.url) {
       axios.get(this.state.url).then((Response) => {
         this.state.EventD = Response.data;
-        console.log(this.state.EventD);
+        console.log("EventD", this.state.EventD);
       });
     }
   }
@@ -63,12 +63,13 @@ class Events extends Component {
 
   render() {
     if (this.state.updated) {
-      console.log(this.state.EventD);
+      console.log("EventD", this.state.EventD);
     }
     const EventList = this.state.EventD.map((data) => {
       return (
         <Event_structure
           key={data._id}
+          id={data._id}
           name={data.Name}
           organizer={data.Organizer}
           date={data.Date}

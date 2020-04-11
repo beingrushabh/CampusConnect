@@ -15,7 +15,7 @@ import { NavLink } from "react-router-dom";
 
 class Event_structure extends Component {
   state = {
-    id: this.props.key,
+    id: this.props.id,
     request: false,
     temp: false,
     organizer: this.props.organizer,
@@ -50,10 +50,12 @@ class Event_structure extends Component {
     this.setState({
       organizer1: event,
     });
+    console.log("organizer name", this.state.organizer1);
   }
 
   componentDidMount() {
-    console.log(this.props.key);
+    console.log("id", this.props.id);
+    console.log("namee", this.props.name);
     axios
       .get(`http://localhost:5000/ClubCom/${this.state.organizer}`)
       .then((Response) => {
@@ -88,7 +90,7 @@ class Event_structure extends Component {
                 pathname: "/Event_more",
                 state: {
                   id: this.state.id,
-                  organizer: this.state.organizerD.name,
+                  organizer: this.state.organizer1,
                 },
               }}
             >

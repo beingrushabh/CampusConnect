@@ -7,6 +7,8 @@ import { NavLink } from "react-router-dom";
 import { render } from "@testing-library/react";
 import "./UserForm.css";
 import axios from "axios";
+import toastr from "reactjs-toastr";
+import "reactjs-toastr/lib/toast.css";
 
 // var sectionStyle = {
 //   backgroundImage: "url(" + background + ")"
@@ -20,10 +22,11 @@ class UserForm extends Component {
     FirstName: "default",
     LastName: "default",
     Gender: "Male",
+    UserType: "Student",
     Age: 4,
     Address: "default",
     Clg_ID: "201701001",
-    User: "Admin"
+    User: "Admin",
   };
 
   constructor(props) {
@@ -35,21 +38,40 @@ class UserForm extends Component {
     e.preventDefault();
 
     const finalObject = {
-      UserName: this.state.UserName,
-      Password: this.state.password,
+      username: this.state.UserName,
+      password: this.state.password,
       Email_ID: this.state.Email_ID,
       FirstName: this.state.FirstName,
       LastName: this.state.LastName,
       Gender: this.state.Gender,
       Age: this.state.Age,
       Address: this.state.Address,
-      Clg_ID: this.state.Clg_ID
+      Clg_ID: this.state.Clg_ID,
     };
 
-    axios.post("http://localhost:5000/User/register", finalObject).then(res => {
-      console.log(res.message);
-      this.props.closePopup();
-    });
+    if (this.state.UserType == "student") {
+      axios
+        .post("http://localhost:5000/User/register", finalObject)
+        .then((res) => {
+          toastr.success("Student Registered", "Title", {
+            displayDuration: 3000,
+          });
+          console.log(res.message);
+          this.props.closePopup();
+        })
+        .catch(toastr.error("Error", "Not Registered"));
+    } else {
+      axios
+        .post("http://localhost:5000/ClubCom/register", finalObject)
+        .then((res) => {
+          toastr.success("ClubCom Registered", "Title", {
+            displayDuration: 3000,
+          });
+          console.log(res.message);
+          this.props.closePopup();
+        })
+        .catch(toastr.error("Error", "Not Registered"));
+    }
   }
 
   render() {
@@ -97,9 +119,9 @@ class UserForm extends Component {
                       name="username"
                       placeholder="Enter Username"
                       required
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          UserName: event.target.value
+                          UserName: event.target.value,
                         });
                       }}
                       className="form-group"
@@ -112,9 +134,9 @@ class UserForm extends Component {
                       type="password"
                       placeholder="Enter Password"
                       required
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Password: event.target.value
+                          Password: event.target.value,
                         });
                       }}
                       className="form-group"
@@ -131,9 +153,9 @@ class UserForm extends Component {
                   placeholder="Enter EmailID"
                   className="form-group"
                   required
-                  onChange={event => {
+                  onChange={(event) => {
                     this.setState({
-                      Email_ID: event.target.value
+                      Email_ID: event.target.value,
                     });
                   }}
                 />
@@ -147,9 +169,9 @@ class UserForm extends Component {
                       placeholder="Enter First Name"
                       required
                       className="form-group"
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          FirstName: event.target.value
+                          FirstName: event.target.value,
                         });
                       }}
                     />
@@ -161,9 +183,9 @@ class UserForm extends Component {
                       name="lname"
                       placeholder="Enter Last Name"
                       required
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          LastName: event.target.value
+                          LastName: event.target.value,
                         });
                       }}
                     />
@@ -176,9 +198,9 @@ class UserForm extends Component {
                     <RadioGroup
                       name="Gender"
                       style={{ display: "flex", width: "100%" }}
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Gender: event
+                          Gender: event,
                         });
                       }}
                     >
@@ -195,9 +217,9 @@ class UserForm extends Component {
                       name="age"
                       placeholder="Enter your Age for eg: 20 years"
                       required
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Age: event.target.value
+                          Age: event.target.value,
                         });
                       }}
                     />
@@ -213,9 +235,9 @@ class UserForm extends Component {
                   name="address"
                   placeholder="Enter Address"
                   required
-                  onChange={event => {
+                  onChange={(event) => {
                     this.setState({
-                      Address: event.target.value
+                      Address: event.target.value,
                     });
                   }}
                 />
@@ -228,21 +250,29 @@ class UserForm extends Component {
                       name="cid"
                       placeholder="Enter college ID"
                       required
-                      onChange={event => {
+                      onChange={(event) => {
                         this.setState({
-                          Clg_ID: event.target.value
+                          Clg_ID: event.target.value,
                         });
                       }}
                     />
                   </div>
                   <div className="col-lg-6">
                     {/* <p>Link for LinkedIn :</p> */}
-                    <input
-                      type="text"
-                      name="links"
-                      placeholder="Enter LinkedIn link"
-                      required
-                    />
+                    <RadioGroup
+                      name="UserType"
+                      style={{ display: "flex", width: "100%" }}
+                      onChange={(event) => {
+                        this.setState({
+                          UserType: event,
+                        });
+                      }}
+                    >
+                      <Radio value="student" />
+                      Student
+                      <Radio value="ClubCom" />
+                      Club/Com
+                    </RadioGroup>
                   </div>
                 </div>
                 <button class="form-group button button1">Add User</button>

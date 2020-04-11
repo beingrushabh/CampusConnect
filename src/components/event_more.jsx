@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Event_structure from "./event_structure";
 import axios from "axios";
 import "./event_structure.css";
 import "./event_list.css";
@@ -13,6 +12,7 @@ class Event_more extends Component {
     userdetails: [],
     id: this.props.location.state.id,
     EventD: [],
+    organizer: this.props.location.state.organizer,
   };
 
   logout() {
@@ -30,7 +30,6 @@ class Event_more extends Component {
   }
 
   componentDidMount() {
-    console.log("id ", this.props.location.state.id);
     axios
       .get(`http://localhost:5000/Event/${this.props.location.state.id}`)
       .then((Response) => {
@@ -73,18 +72,47 @@ class Event_more extends Component {
             </div>
           </nav>
         </div>
+        <div>
+          <div className="event-template">
+            <span>
+              <h2 className="event-heading">{this.state.EventD.Name}</h2>
+              <span className="organize">
+                By <span className="organizer">{this.state.organizer}</span>
+              </span>
+            </span>
 
-        <Event_structure
-          key={this.state.EventD._id}
-          name={this.state.EventD.Name}
-          organizer={this.props.location.state.organizer}
-          date={this.state.EventD.Date}
-          time={this.state.EventD.Time}
-          venue={this.state.EventD.Venue}
-          description={this.state.EventD.Description}
-          status={true}
-          duration={this.state.EventD.Duration}
-        />
+            <div className="date">
+              <span className="textclr"> Date : {this.state.EventD.Date}</span>
+              &nbsp;&nbsp;&nbsp;
+              <span className="textclr"> Time : {this.state.EventD.Time}</span>
+            </div>
+            <div className="info">{this.state.EventD.Description}</div>
+
+            {this.state.EventD.Approved && (
+              <button className="RSVP">I'm interested</button>
+            )}
+
+            {!this.state.EventD.Approved && (
+              <button
+                href="/Admin_dashboard"
+                onClick={() => {
+                  this.setState({
+                    request: true,
+                  });
+
+                  // this.requestApprove(this.state.id);
+                }}
+                className="approval"
+              >
+                Approve
+              </button>
+            )}
+
+            <div class="comments">
+              <span class="heading"> Comments</span>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

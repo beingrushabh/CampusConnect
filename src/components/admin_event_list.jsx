@@ -8,12 +8,12 @@ class Admin_Events extends Component {
     EventD: [],
     updated: false,
     id: 1234,
-    refresh: false
+    refresh: false,
   };
 
   Refresh() {
     this.setState({
-      refresh: !this.state.refresh
+      refresh: !this.state.refresh,
     });
     console.log(this.state.refresh);
   }
@@ -25,11 +25,11 @@ class Admin_Events extends Component {
 
   componentDidUpdate(prevProp, prevState) {
     if (prevState.refresh != this.state.refresh) {
-      axios.get("http://localhost:5000/Event/Pending").then(Response => {
+      axios.get("http://localhost:5000/Event/Pending").then((Response) => {
         this.state.EventD = Response.data;
         console.log(this.state.EventD);
         this.setState({
-          updated: true
+          updated: true,
         });
       });
     }
@@ -37,11 +37,11 @@ class Admin_Events extends Component {
 
   async componentDidMount() {
     console.log("fetch");
-    axios.get("http://localhost:5000/Event/Pending").then(Response => {
+    axios.get("http://localhost:5000/Event/Pending").then((Response) => {
       this.state.EventD = Response.data;
-      console.log(this.state.EventD);
+      console.log("AdminEventDs", this.state.EventD);
       this.setState({
-        updated: true
+        updated: true,
       });
     });
   }
@@ -49,9 +49,10 @@ class Admin_Events extends Component {
     if (this.state.updated) {
       console.log(this.state.EventD);
     }
-    const EventList = this.state.EventD.map(data => {
+    const EventList = this.state.EventD.map((data) => {
       return (
         <Event_structure
+          key={data._id}
           id={data._id}
           name={data.Name}
           organizer={data.Organizer}

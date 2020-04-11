@@ -20,6 +20,7 @@ router.route("/register").post((req, res) => {
   const Age = req.body.Age;
   const Address = req.body.Address;
   const Clg_ID = req.body.Clg_ID;
+  const UserType = "student";
 
   const newUser = new User({
     username,
@@ -31,6 +32,7 @@ router.route("/register").post((req, res) => {
     Age,
     Address,
     Clg_ID,
+    UserType,
   });
   User.findOne({ username: username }).then((user) => {
     if (user != null) {
@@ -139,7 +141,7 @@ router.route("/update/:id").post(async (req, res) => {
       User.Age = req.body.Age;
       User.Address = req.body.Address;
       User.Clg_ID = req.body.Clg_ID;
-
+      User.UserType = "student";
       User.save()
         .then(() => res.json("User updated!"))
         .catch((err) => res.status(400).json("Error: " + err));

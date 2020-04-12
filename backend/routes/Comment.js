@@ -14,12 +14,12 @@ router.route('/add/:id').post((req, res) => {
   const Description = req.body.Description;
   const Event = req.params.id;
   const reported = false;
-  User.findOne({UserName: String(req.body.UserName)},{'_id':1})
+  User.findOne({username: String(req.body.username)},{'_id':1})
 	.exec(function(err,user){
 	  if(err)
 		  return console.log(err);
 		
-	User=user._id;
+	User=User._id;
   
   
   const newComment = new Comment({

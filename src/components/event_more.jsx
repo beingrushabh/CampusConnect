@@ -6,6 +6,7 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import { NavLink, Redirect } from "react-router-dom";
+import Comments from "./comments";
 
 class Event_more extends Component {
   state = {
@@ -142,6 +143,11 @@ class Event_more extends Component {
 
             <div class="comments">
               <span class="heading"> Comments</span>
+              <Comments
+                key={this.state.EventD._id}
+                id={this.state.EventD._id}
+                name={this.state.EventD.Name}
+              />
             </div>
           </div>
         </div>

@@ -150,7 +150,7 @@ class SimpleForm extends Component {
                     <input
                       type="time"
                       name="Time"
-                      placeholder="Time"
+                      placeholder="like 07:30"
                       required
                       className="form-group"
                       onChange={(event) => {

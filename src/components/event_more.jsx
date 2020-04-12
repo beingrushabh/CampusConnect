@@ -5,31 +5,58 @@ import "./event_list.css";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 
 class Event_more extends Component {
   state = {
     userdetails: [],
     id: this.props.location.state.id,
     EventD: [],
+    loginStatus: "Log Out",
+    loggedOut: false,
     organizer: this.props.location.state.organizer,
   };
 
   logout() {
-    this.setState({
-      logoutstate: true,
-    });
+    if (this.state.loginStatus == "Back to login") {
+      this.setState({
+        loggedOut: true,
+      });
+    } else {
+      this.setState({
+        logoutstate: true,
+      });
+    }
   }
 
   componentDidUpdate(prevprops, prevstate) {
     if (prevstate.logoutstate != this.state.logoutstate) {
-      axios
-        .get("https://localhost:5000/User/logout")
-        .then((res) => console.log(res));
+      axios.get("https://localhost:5000/User/logout").then((res) => {
+        console.log(res);
+
+        this.setState({
+          loggedOut: true,
+        });
+      });
     }
   }
 
   componentDidMount() {
+    axios
+      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+      .then((res) => {
+        console.log("simple form user", res);
+        if (res.data.user != null) {
+          this.setState({
+            userdetails: res.data.user,
+          });
+        } else {
+          this.setState({
+            loginStatus: "Back to login",
+          });
+        }
+      });
+
     axios
       .get(`http://localhost:5000/Event/${this.props.location.state.id}`)
       .then((Response) => {
@@ -41,8 +68,8 @@ class Event_more extends Component {
       });
   }
   render() {
-    if (this.state.updated) {
-      console.log(this.state.EventD);
+    if (this.state.loggedOut) {
+      return <Redirect to="/" />;
     }
     return (
       <div>
@@ -52,20 +79,16 @@ class Event_more extends Component {
               <h2> Campus Connect</h2>
             </NavLink>
 
-            <div className="col-lg-3"></div>
+            <div className="col-lg-5"></div>
             <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/PlacementUpdates">
-                  Placement Updates
-                </a>
-
                 <a class="nav-item nav-link" href="#">
                   {this.state.userdetails.username}
                 </a>
                 {/* <NavLink to="/" class="nav-item nav-link " tabindex="-1"> */}
                 <a class="nav-item nav-link" onClick={this.logout.bind(this)}>
                   {" "}
-                  Log Out
+                  {this.state.loginStatus}
                 </a>
                 {/* </NavLink> */}
               </div>
@@ -88,9 +111,10 @@ class Event_more extends Component {
             </div>
             <div className="info">{this.state.EventD.Description}</div>
 
-            {this.state.EventD.Approved && (
-              <button className="RSVP">I'm interested</button>
-            )}
+            {this.state.userdetails.UserType != "ClubCom" &&
+              this.state.EventD.Approved && (
+                <button className="RSVP">I'm interested</button>
+              )}
 
             {!this.state.EventD.Approved && (
               <button

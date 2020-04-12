@@ -66,13 +66,13 @@ class Organizer_Events extends Component {
       return (
         <Event_structure
           key={data._id}
+          id={data._id}
           name={data.Name}
           organizer={data.Organizer}
           date={data.Date}
           time={data.Time}
           venue={data.Venue}
           description={data.Description}
-          status={true}
           duration={data.Duration}
         />
       );
@@ -82,8 +82,8 @@ class Organizer_Events extends Component {
         <div className=" container header">
           <h1 style={{ color: "black", fontSize: "30px" }}>Events</h1>
         </div>
-        <div className="row event-back">
-          <div className="scrollEvent">
+        <div className="">
+          <div className="row event-back scrollEvent">
             <div className="eventList">{EventList}</div>
           </div>
         </div>

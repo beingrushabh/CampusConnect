@@ -160,7 +160,7 @@ export function isAuthenticated() {
     .then((res) => {
       console.log("heyy you", res);
       if (res.data.user != null) {
-        return res.data.user;
+        return true;
       } else {
         return false;
       }

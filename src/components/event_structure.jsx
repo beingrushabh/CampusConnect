@@ -155,16 +155,16 @@ class Event_structure extends Component {
               >
                 <button className="more-info">More Info >></button>
               </NavLink>
-              {this.props.status && (
-                <div>
-                  <button onClick={this.RsvpAdd.bind(this)} className="RSVP">
-                    I'm interested
-                  </button>{" "}
-                  &nbsp;
-                  {/* <span>{this.props.NoOfAttendees}</span> */}
-                </div>
-              )}
-
+              {this.props.status &&
+                this.state.userdetails.UserType != "ClubCom" && (
+                  <div>
+                    <button onClick={this.RsvpAdd.bind(this)} className="RSVP">
+                      I'm interested
+                    </button>{" "}
+                    &nbsp;
+                    {/* <span>{this.props.NoOfAttendees}</span> */}
+                  </div>
+                )}
               {!this.state.userdetails.username == "admin" &&
                 this.props.status && (
                   <button
@@ -181,16 +181,7 @@ class Event_structure extends Component {
                     Approve
                   </button>
                 )}
-
-              {this.props.status ? (
-                <button
-                  style={{ backgroundColor: "black" }}
-                  className="approval"
-                  disabled
-                >
-                  approved
-                </button>
-              ) : (
+              {!this.props.status ? (
                 <button
                   style={{ backgroundColor: "black" }}
                   className="approval"
@@ -198,18 +189,21 @@ class Event_structure extends Component {
                 >
                   Not approved
                 </button>
-              )}
-              <button
-                onClick={() =>
-                  this.setState({
-                    remove: true,
-                  })
-                }
-                style={{ backgroundColor: "Red" }}
-                className="approval"
-              >
-                Remove Event
-              </button>
+              ) : null}
+
+              {this.state.userdetails.UserType == "ClubCom" ? (
+                <button
+                  onClick={() =>
+                    this.setState({
+                      remove: true,
+                    })
+                  }
+                  style={{ backgroundColor: "Red" }}
+                  className="approval"
+                >
+                  Remove Event
+                </button>
+              ) : null}
             </div>
           </div>
         </div>

@@ -90,7 +90,7 @@ class Events extends Component {
           time={data.Time}
           venue={data.Venue}
           description={data.Description}
-          status={true}
+          status={data.Approved}
           duration={data.Duration}
           NoOfAttendees={data.NoOfAttendees}
           refresh={this.Refresh}

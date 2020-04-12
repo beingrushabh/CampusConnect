@@ -14,6 +14,7 @@ class Event_more extends Component {
     EventD: [],
     loginStatus: "Log Out",
     loggedOut: false,
+    logoutstate: false,
     organizer: this.props.location.state.organizer,
   };
 
@@ -31,13 +32,20 @@ class Event_more extends Component {
 
   componentDidUpdate(prevprops, prevstate) {
     if (prevstate.logoutstate != this.state.logoutstate) {
-      axios.get("https://localhost:5000/User/logout").then((res) => {
-        console.log(res);
+      const user = {
+        username: this.state.userdetails.username,
+      };
+      axios
+        .post("http://localhost:5000/User/logout", user, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
 
-        this.setState({
-          loggedOut: true,
+          this.setState({
+            loggedOut: true,
+          });
         });
-      });
     }
   }
 

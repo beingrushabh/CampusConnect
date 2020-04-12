@@ -5,7 +5,7 @@ import { browserHistory, Router, Route, Redirect } from "react-router";
 import axios from "axios";
 // import checkAuthentication from ".../backend/auth/protect.js";
 
-class PopLogin extends Component {
+export class PopLogin extends Component {
   state = {
     // submit1: false
     user: "default",
@@ -154,4 +154,15 @@ class PopLogin extends Component {
   }
 }
 
-export default PopLogin;
+export function isAuthenticated() {
+  axios
+    .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+    .then((res) => {
+      console.log("heyy you", res);
+      if (res.data.user != null) {
+        return res.data.user;
+      } else {
+        return false;
+      }
+    });
+}

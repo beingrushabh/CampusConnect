@@ -17,18 +17,33 @@ class Organizer_Events extends Component {
     loadevents: false,
     urlcom: "http://localhost:5000/ClubCom/",
     userdetails: [],
+    refreshed: false,
   };
 
   constructor(props) {
     super(props);
-    // this.addFilter = this.addFilter.bind(this);
+    this.Refresh = this.Refresh.bind(this);
   }
 
   componentDidUpdate(prevprops, prevstate) {
+    if (prevstate.refreshed != this.state.refreshed) {
+      axios
+        .get(
+          `http://localhost:5000/Event/getallEvents/${this.state.userdetails.username}`
+        )
+        .then((Response) => {
+          this.state.EventD = Response.data;
+          console.log(this.state.EventD);
+          this.setState({
+            refreshed: !this.state.refreshed,
+          });
+        });
+    }
+
     if (prevstate.loadevents != this.state.loadevents) {
       axios
         .get(
-          `http://localhost:5000/Event/filterBy/${this.state.userdetails.username}`
+          `http://localhost:5000/Event/getallEvents/${this.state.userdetails.username}`
         )
         .then((Response) => {
           this.state.EventD = Response.data;
@@ -57,7 +72,12 @@ class Organizer_Events extends Component {
       console.log(this.state.ComD);
     });
   }
-
+  Refresh() {
+    this.setState({
+      refreshed: !this.state.refreshed,
+    });
+    console.log(this.state.refreshed);
+  }
   render() {
     if (this.state.updated) {
       console.log(this.state.EventD);
@@ -72,8 +92,10 @@ class Organizer_Events extends Component {
           date={data.Date}
           time={data.Time}
           venue={data.Venue}
+          status={data.Approved}
           description={data.Description}
           duration={data.Duration}
+          refresh={this.Refresh}
         />
       );
     });

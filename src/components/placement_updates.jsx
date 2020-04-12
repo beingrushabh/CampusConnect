@@ -4,32 +4,71 @@ import Event_structure from "./event_structure";
 import axios from "axios";
 import "./event_structure.css";
 import Placement_Template from "./placement_template";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 
 class Placement_updates extends Component {
   state = {
     Company: [],
     updated: false,
-    organizerD: []
+    organizerD: [],
+    loggedout: false,
+    userdetails: [],
+    logoutstate: false,
   };
 
   constructor(props) {
     super(props);
   }
+
+  componentDidUpdate(prevprops, prevstate) {
+    if (prevstate.logoutstate != this.state.logoutstate) {
+      const user = {
+        username: this.state.userdetails.username,
+      };
+      console.log(user);
+      axios
+        .post("http://localhost:5000/User/logout", user, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
+          this.setState({
+            loggedout: true,
+          });
+        });
+    }
+  }
+
   async componentDidMount() {
     console.log("fetch");
-    axios.get("http://localhost:5000/Company/").then(Response => {
+    axios.get("http://localhost:5000/Company/").then((Response) => {
       this.state.Company = Response.data;
       console.log(this.state.Company);
       this.setState({
-        updated: true
+        updated: true,
       });
+    });
+    axios
+      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+      .then((res) => {
+        console.log("simple form user", res);
+        if (res.data.user != null) {
+          this.setState({
+            userdetails: res.data.user,
+          });
+        }
+      });
+  }
+  logout() {
+    this.setState({
+      logoutstate: true,
     });
   }
   render() {
-    // if (this.state.updated) {
-    // }
-    const CompanyList = this.state.Company.map(data => {
+    if (this.state.loggedout) {
+      return <Redirect to="/" />;
+    }
+    const CompanyList = this.state.Company.map((data) => {
       return (
         <Placement_Template
           key={data._id}
@@ -55,18 +94,15 @@ class Placement_updates extends Component {
             <div className="col-lg-3"></div>
             <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
-                <NavLink to="/DashBoard" class="nav-item nav-link">
+                <NavLink to="/student" class="nav-item nav-link">
                   Dashboard
                 </NavLink>
-                <NavLink to="/Add_events" class="nav-item nav-link">
-                  Request Event
-                </NavLink>
                 <a class="nav-item nav-link" href="#">
-                  {this.state.user}
+                  {this.state.userdetails.username}
                 </a>
-                <NavLink to="/" class="nav-item nav-link " tabindex="-1">
+                <a class="nav-item nav-link" onClick={this.logout.bind(this)}>
                   Log Out
-                </NavLink>
+                </a>
               </div>
             </div>
           </nav>
@@ -77,7 +113,7 @@ class Placement_updates extends Component {
             Placement updates
           </h1>
         </div>
-        <div className="container event-back">
+        <div className="container">
           <div className="row">
             <div className="col-lg-2 col-md-1 col-sm-0"></div>
             <div className="col-lg-8 col-md-10 col-sm-12">

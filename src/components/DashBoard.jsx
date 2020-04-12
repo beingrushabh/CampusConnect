@@ -15,7 +15,7 @@ import "./login/login.css";
 import News_list from "./news_list";
 import AddNews from "./add_news";
 import UserForm from "./UserForm";
-import PopLogin from "./popupLogin";
+import { PopLogin } from "./popupLogin";
 import axios from "axios";
 import Organizer_Events from "./organizer_event_list";
 

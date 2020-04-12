@@ -24,6 +24,8 @@ class Event_structure extends Component {
     Rsvpadd: false,
     Rsvpremove: false,
     rsvp: 0,
+    remove: false,
+    userdetails: [],
   };
   // componentDidMount() {
 
@@ -42,6 +44,12 @@ class Event_structure extends Component {
   // }
 
   componentDidUpdate(prevProp, PrevState) {
+    if (PrevState.remove != this.state.remove) {
+      axios
+        .delete(`http://localhost:5000/Event/${this.state.id}`)
+        .then((Response) => this.props.refresh());
+    }
+
     if (PrevState.request != this.state.request) {
       const url = `http://localhost:5000/Event/approve/${this.state.id}`;
       axios.post(url).then((Response) => this.props.refresh());
@@ -99,6 +107,17 @@ class Event_structure extends Component {
         this.state.organizerD = Response.data;
         this.updateOrganizer(this.state.organizerD.username);
       });
+
+    axios
+      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+      .then((res) => {
+        console.log("simple form user", res);
+        if (res.data.user != null) {
+          this.setState({
+            userdetails: res.data.user,
+          });
+        }
+      });
   }
 
   render() {
@@ -146,21 +165,51 @@ class Event_structure extends Component {
                 </div>
               )}
 
-              {!this.props.status && (
-                <button
-                  href="/Admin_dashboard"
-                  onClick={() => {
-                    this.setState({
-                      request: true,
-                    });
+              {!this.state.userdetails.username == "admin" &&
+                this.props.status && (
+                  <button
+                    href="/Admin_dashboard"
+                    onClick={() => {
+                      this.setState({
+                        request: true,
+                      });
 
-                    // this.requestApprove(this.state.id);
-                  }}
+                      // this.requestApprove(this.state.id);
+                    }}
+                    className="approval"
+                  >
+                    Approve
+                  </button>
+                )}
+
+              {this.props.status ? (
+                <button
+                  style={{ backgroundColor: "black" }}
                   className="approval"
+                  disabled
                 >
-                  Approve
+                  approved
+                </button>
+              ) : (
+                <button
+                  style={{ backgroundColor: "black" }}
+                  className="approval"
+                  disabled
+                >
+                  Not approved
                 </button>
               )}
+              <button
+                onClick={() =>
+                  this.setState({
+                    remove: true,
+                  })
+                }
+                style={{ backgroundColor: "Red" }}
+                className="approval"
+              >
+                Remove Event
+              </button>
             </div>
           </div>
         </div>

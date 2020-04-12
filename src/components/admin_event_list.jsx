@@ -71,8 +71,8 @@ class Admin_Events extends Component {
         <div className=" container header">
           <h1 style={{ color: "black", fontSize: "30px" }}>Events</h1>
         </div>
-        <div className="row event-back">
-          <div className="scrollEvent">
+        <div className="">
+          <div className="row event-back scrollEvent">
             <div className="eventList">{EventList}</div>
           </div>
         </div>

@@ -6,11 +6,13 @@ import { NavLink } from "react-router-dom";
 import { render } from "@testing-library/react";
 import "./add_news.css";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // var sectionStyle = {
 //   backgroundImage: "url(" + background + ")"
 // };
-
+toast.configure();
 class AddNews extends Component {
   state = {
     Title: "default",
@@ -34,6 +36,8 @@ class AddNews extends Component {
     };
     console.log(finalObject);
     axios.post("http://localhost:5000/News/add", finalObject).then((res) => {
+      toast.success("News Added");
+
       return this.props.closePopup();
     });
   }

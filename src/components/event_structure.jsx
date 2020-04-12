@@ -3,6 +3,10 @@ import "./event_structure.css";
 import axios from "axios";
 import { browserHistory, Router, Route, Redirect, history } from "react-router";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 
 // function approve(id, request) {
 //   if (request) {
@@ -25,6 +29,7 @@ class Event_structure extends Component {
     Rsvpremove: false,
     rsvp: 0,
     remove: false,
+    loggedin: true,
     userdetails: [],
   };
   // componentDidMount() {
@@ -47,12 +52,18 @@ class Event_structure extends Component {
     if (PrevState.remove != this.state.remove) {
       axios
         .delete(`http://localhost:5000/Event/${this.state.id}`)
-        .then((Response) => this.props.refresh());
+        .then((Response) => {
+          this.props.refresh();
+          toast.success("Event Deleted !!");
+        });
     }
 
     if (PrevState.request != this.state.request) {
       const url = `http://localhost:5000/Event/approve/${this.state.id}`;
-      axios.post(url).then((Response) => this.props.refresh());
+      axios.post(url).then((Response) => {
+        this.props.refresh();
+        toast.success("Event Approved!!");
+      });
     }
 
     if (PrevState.RsvpAdd != this.state.Rsvpadd && this.state.RsvpAdd) {
@@ -116,6 +127,10 @@ class Event_structure extends Component {
           this.setState({
             userdetails: res.data.user,
           });
+        } else {
+          this.setState({
+            loggedin: false,
+          });
         }
       });
   }
@@ -156,7 +171,9 @@ class Event_structure extends Component {
                 <button className="more-info">More Info >></button>
               </NavLink>
               {this.props.status &&
-                this.state.userdetails.UserType != "ClubCom" && (
+                this.state.userdetails.UserType != "ClubCom" &&
+                this.state.userdetails.username != "admin" &&
+                this.state.loggedin && (
                   <div>
                     <button onClick={this.RsvpAdd.bind(this)} className="RSVP">
                       I'm interested
@@ -165,8 +182,8 @@ class Event_structure extends Component {
                     {/* <span>{this.props.NoOfAttendees}</span> */}
                   </div>
                 )}
-              {!this.state.userdetails.username == "admin" &&
-                this.props.status && (
+              {this.state.userdetails.username == "admin" &&
+                !this.props.status && (
                   <button
                     href="/Admin_dashboard"
                     onClick={() => {
@@ -181,17 +198,19 @@ class Event_structure extends Component {
                     Approve
                   </button>
                 )}
-              {!this.props.status ? (
-                <button
-                  style={{ backgroundColor: "black" }}
-                  className="approval"
-                  disabled
-                >
-                  Not approved
-                </button>
-              ) : null}
+              {!this.props.status &&
+                this.state.userdetails.username != "admin" && (
+                  <button
+                    style={{ backgroundColor: "black" }}
+                    className="approval"
+                    disabled
+                  >
+                    Not approved
+                  </button>
+                )}
 
-              {this.state.userdetails.UserType == "ClubCom" ? (
+              {(this.state.userdetails.UserType == "ClubCom" ||
+                this.state.userdetails.username == "admin") && (
                 <button
                   onClick={() =>
                     this.setState({
@@ -203,7 +222,7 @@ class Event_structure extends Component {
                 >
                   Remove Event
                 </button>
-              ) : null}
+              )}
             </div>
           </div>
         </div>

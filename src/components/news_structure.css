@@ -45,5 +45,18 @@
 
 .remove {
   float: right;
-  background: red !important;
+  color: white;
+  font-weight: bolder;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-top: 5px;
+  margin-left: 20px;
+  border: 2px white solid;
+  border-radius: 5px;
+  background: rgb(255, 74, 74);
+}
+.remove:hover {
+  background: rgb(255, 0, 0);
 }

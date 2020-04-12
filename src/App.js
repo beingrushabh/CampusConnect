@@ -11,7 +11,7 @@ import Add_events from "./components/add_events";
 import UserForm from "./components/UserForm";
 import Placement_updates from "./components/placement_updates";
 import Placement_officer from "./components/placement_officer";
-import { loginPop, isAuthenticated } from "./components/popupLogin";
+import { PopLogin } from "./components/popupLogin";
 import News_list from "./components/news_list";
 import AddNews from "./components/add_news";
 import Event_more from "./components/event_more";
@@ -21,10 +21,10 @@ import axios from "axios";
 class LoginPage extends Component {
   state = {
     loginstatus: false,
-    userdetails: isAuthenticated(),
+    userdetails: [],
   };
   componentDidMount() {
-    console.log("apppppppp", isAuthenticated());
+    console.log("apppppppp");
     // axios.get("http://localhost:5000/User/isLoggedIn").then((response) => {
     //   console.log("loggedin user: ", response.data);
     //   if (response.data.user != null) {

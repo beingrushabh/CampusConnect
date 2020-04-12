@@ -17,7 +17,7 @@ class Organizer_Events extends Component {
     loadevents: false,
     urlcom: "http://localhost:5000/ClubCom/",
     userdetails: [],
-    refreshed: false,
+    refreshed: this.props.Event,
   };
 
   constructor(props) {

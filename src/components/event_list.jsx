@@ -8,6 +8,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import $ from "jquery";
 import Popper from "popper.js";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 
 class Events extends Component {
   state = {
@@ -70,6 +74,7 @@ class Events extends Component {
         this.setState({
           filteradded: true,
         });
+        toast.success("Filter Added!!");
         console.log("EventD", this.state.EventD);
       });
     }

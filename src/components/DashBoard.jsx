@@ -434,7 +434,10 @@ export class Organizer_dashboard extends Component {
           </div>
           <div className="container row">
             <div className="col-lg-8 col-md-8 col-sm-12">
-              <Organizer_Events userdetails={this.state.userdetails} />
+              <Organizer_Events
+                refresh={this.state.Event}
+                userdetails={this.state.userdetails}
+              />
             </div>
             <div className="col-lg-4 col-md-4 col-sm-12">
               <News_list showRemove={false} />

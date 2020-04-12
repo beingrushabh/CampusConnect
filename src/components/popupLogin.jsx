@@ -4,6 +4,10 @@ import { NavLink } from "react-router-dom";
 import { browserHistory, Router, Route, Redirect } from "react-router";
 import axios from "axios";
 // import checkAuthentication from ".../backend/auth/protect.js";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 
 export class PopLogin extends Component {
   state = {
@@ -79,6 +83,9 @@ export class PopLogin extends Component {
           error: false,
           userdetails: res.data,
         });
+        toast.success(
+          `${this.state.userdetails.username} logged in succefully`
+        );
         console.log(this.state.userdetails);
       })
       .catch((error1) => {
@@ -88,6 +95,7 @@ export class PopLogin extends Component {
           errormsg: error1.response.data,
           loggedin: false,
         });
+        toast.error("Error logging in!!");
       });
   }
 

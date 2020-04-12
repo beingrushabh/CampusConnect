@@ -6,6 +6,10 @@ import { NavLink } from "react-router-dom";
 import { render } from "@testing-library/react";
 import "./SimpleForm.css";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 
 // var sectionStyle = {
 //   backgroundImage: "url(" + background + ")"
@@ -60,6 +64,7 @@ class SimpleForm extends Component {
     axios.post("http://localhost:5000/Event/add", finalObject).then((res) => {
       console.log(res.message);
       this.props.closePopup();
+      toast.success("Event Added");
     });
   }
 

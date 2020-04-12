@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import "./news_structure.css";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 
 class News_structure extends Component {
   state = {
@@ -16,6 +20,7 @@ class News_structure extends Component {
         .then((res) => {
           console.log(res.data);
           this.props.refresh();
+          toast.success("News Deleted");
         });
     }
   }
@@ -30,7 +35,7 @@ class News_structure extends Component {
             <p class="Description">{this.props.Description}</p>
             {this.props.showRemove ? (
               <button
-                class="btn remove btn-danger"
+                class="remove"
                 onClick={() => {
                   this.setState({
                     Remove: true,

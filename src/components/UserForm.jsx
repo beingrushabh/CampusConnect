@@ -7,8 +7,10 @@ import { NavLink } from "react-router-dom";
 import { render } from "@testing-library/react";
 import "./UserForm.css";
 import axios from "axios";
-import toastr from "reactjs-toastr";
-import "reactjs-toastr/lib/toast.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure();
 
 // var sectionStyle = {
 //   backgroundImage: "url(" + background + ")"
@@ -54,24 +56,20 @@ class UserForm extends Component {
       axios
         .post("http://localhost:5000/User/register", finalObject)
         .then((res) => {
-          toastr.success("Student Registered", "Title", {
-            displayDuration: 3000,
-          });
+          toast.success("Student Registered");
           console.log(res.message);
           this.props.closePopup();
         })
-        .catch(toastr.error("Error", "Not Registered"));
+        .catch(toast.error("Error", "Not Registered"));
     } else {
       axios
         .post("http://localhost:5000/ClubCom/register", finalObject)
         .then((res) => {
-          toastr.success("ClubCom Registered", "Title", {
-            displayDuration: 3000,
-          });
+          toast.success("ClubCom Registered");
           console.log(res.message);
           this.props.closePopup();
         })
-        .catch(toastr.error("Error", "Not Registered"));
+        .catch(toast.error("Error,Registeration failure"));
     }
   }
 

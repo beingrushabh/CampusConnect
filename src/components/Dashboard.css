@@ -35,6 +35,10 @@
 .navbar-light .navbar-nav .nav-link :hover {
   color: black !important;
 }
-*/ .container {
-  max-width: 1400px !important;
+.container {
+  width: 100% !important;
+}
+.row {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
 }

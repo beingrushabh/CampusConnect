@@ -12,7 +12,7 @@ class News_structure extends Component {
     if (prevstate.Remove != this.state.Remove) {
       console.log(this.state.key);
       axios
-        .delete(`https://localhost:5000/News/${this.state.key}`)
+        .delete(`http://localhost:5000/News/${this.state.key}`)
         .then((res) => {
           console.log(res.data);
           this.props.refresh();

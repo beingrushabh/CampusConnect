@@ -118,7 +118,7 @@ class UserForm extends Component {
                     <input
                       type="text"
                       name="username"
-                      placeholder="*Enter Username"
+                      placeholder="Enter Username*"
                       required
                       onChange={(event) => {
                         this.setState({
@@ -132,7 +132,7 @@ class UserForm extends Component {
                     {/* <p>Password :</p> */}
                     <input
                       type="password"
-                      placeholder="*Enter Password"
+                      placeholder="Enter Password*"
                       required
                       onChange={(event) => {
                         this.setState({
@@ -145,20 +145,22 @@ class UserForm extends Component {
                 </div>
                 {/* <p>Email ID :</p>
               <br /> */}
-                <input
-                  type="email"
-                  pattern="{/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}"
-                  name="emailid"
-                  className="form-control"
-                  placeholder="*Enter EmailID"
-                  className="form-group"
-                  required
-                  onChange={(event) => {
-                    this.setState({
-                      Email_ID: event.target.value,
-                    });
-                  }}
-                />
+                <div className="row col-lg-12">
+                  <input
+                    type="email"
+                    pattern="{/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}"
+                    name="emailid"
+                    className="form-control"
+                    placeholder="Enter EmailID*"
+                    className="form-group"
+                    required
+                    onChange={(event) => {
+                      this.setState({
+                        Email_ID: event.target.value,
+                      });
+                    }}
+                  />
+                </div>
                 {/* Guys, Input pattern for first name and last name is /^[A-Za-z]+$/ and it can only be verified when form is submitted, DURING BACKEND*/}
                 <div className="row">
                   <div className="col-lg-6">
@@ -180,7 +182,7 @@ class UserForm extends Component {
                     <input
                       type="text"
                       name="Contact"
-                      placeholder="*Enter Contact"
+                      placeholder="Enter Contact*"
                       required
                       onChange={(event) => {
                         this.setState({
@@ -246,7 +248,7 @@ class UserForm extends Component {
                       type="text"
                       name="cid"
                       className="required"
-                      placeholder="*Enter college ID"
+                      placeholder="Enter college ID*"
                       required
                       onChange={(event) => {
                         this.setState({

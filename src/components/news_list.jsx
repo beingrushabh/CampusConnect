@@ -9,6 +9,7 @@ class News_list extends Component {
     NewsD: [],
     refreshtoken: false,
     updated: false,
+    newsreload: false,
   };
 
   constructor(props) {
@@ -24,6 +25,9 @@ class News_list extends Component {
     if (prevstate.refresh != this.state.refresh) {
       axios.get("http://localhost:5000/News/").then((Response) => {
         this.state.NewsD = Response.data;
+        this.setState({
+          newsreload: !this.state.newsreload,
+        });
         console.log(this.state.NewsD);
       });
     }

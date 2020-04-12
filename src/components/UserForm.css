@@ -13,12 +13,13 @@ img.main {
   z-index: -1;
 }
 .loginbox {
+  box-shadow: 2px 3px 8px 1px rgba(0, 0, 0, 0.6) !important;
   width: 500px;
   height: 550px;
-  background: #0d0f10;
+  background: #ffffff;
   opacity: 0.8;
   background-size: cover;
-  color: #fff;
+  color: rgb(0, 0, 0);
   top: 55%;
   left: 50%;
   border-radius: 20px;
@@ -56,7 +57,7 @@ h1 {
 .loginbox button {
   background-color: #4caf50;
   border: none;
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 15px;
   text-align: center;
   text-decoration: none;
@@ -83,14 +84,23 @@ h1 {
   margin-bottom: 20px;
 }
 
-.loginbox input[type="text"],
-input[type="password"] {
+.loginbox input[type="email"] {
   border: none;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid rgb(0, 0, 0);
   background: transparent;
   outline: none;
   height: 40px;
-  color: #fff;
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+}
+.loginbox input[type="text"],
+input[type="password"] {
+  border: none;
+  border-bottom: 1px solid rgb(0, 0, 0);
+  background: transparent;
+  outline: none;
+  height: 40px;
+  color: rgb(0, 0, 0);
   font-size: 16px;
 }
 .loginbox input[type="submit"] {
@@ -98,7 +108,7 @@ input[type="password"] {
   outline: none;
   height: 40px;
   background: #fb2525;
-  color: #fff;
+  color: rgb(0, 0, 0);
   font-size: 18px;
   border-radius: 20px;
 }
@@ -132,5 +142,10 @@ input[type="password"] {
   bottom: 0;
   margin: auto;
   backdrop-filter: blur(2px);
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.required :after {
+  content: " *";
+  color: red;
 }

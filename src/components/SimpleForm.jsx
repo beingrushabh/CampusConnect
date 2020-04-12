@@ -54,7 +54,6 @@ class SimpleForm extends Component {
       Time: this.state.Time,
       Venue: this.state.Venue,
       Duration: this.state.Duration,
-      NoOfAttendees: this.state.NoOfAttendees,
       Description: this.state.Description,
     };
 
@@ -147,6 +146,7 @@ class SimpleForm extends Component {
                   </div>
                   <div className="col-lg-6">
                     {/* <p>Last Name :</p> */}
+
                     <input
                       type="time"
                       name="Time"
@@ -179,21 +179,7 @@ class SimpleForm extends Component {
                       }}
                     />
                   </div>
-                  <div className="col-lg-6">
-                    {/* <p id="age">Age :</p> */}
-                    <input
-                      type="text"
-                      name="NoOfAttendees"
-                      placeholder="Number of Attendees"
-                      required
-                      className="form-group"
-                      onChange={(event) => {
-                        this.setState({
-                          NoOfAttendees: event.target.value,
-                        });
-                      }}
-                    />
-                  </div>
+                  <div className="col-lg-6">{/* <p id="age">Age :</p> */}</div>
                 </div>
                 {/* <p>Address :</p> */}
 

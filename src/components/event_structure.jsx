@@ -21,6 +21,9 @@ class Event_structure extends Component {
     organizer: this.props.organizer,
     organizerD: [],
     organizer1: "default",
+    Rsvpadd: false,
+    Rsvpremove: false,
+    rsvp: 0,
   };
   // componentDidMount() {
 
@@ -42,7 +45,40 @@ class Event_structure extends Component {
     if (PrevState.request != this.state.request) {
       const url = `http://localhost:5000/Event/approve/${this.state.id}`;
       axios.post(url).then((Response) => this.props.refresh());
-      return true;
+    }
+
+    if (PrevState.RsvpAdd != this.state.Rsvpadd && this.state.RsvpAdd) {
+      axios
+        .post(`http://localhost:5000/Event/rsvp/${this.state.id}`)
+        .then((Response) => {
+          console.log("rsvp add", Response);
+          this.props.refresh();
+        });
+    }
+
+    if (
+      PrevState.Rsvpremove != this.state.Rsvpremove &&
+      this.state.Rsvpremove
+    ) {
+      axios
+        .post(`http://localhost:5000/Event/rsvpcancel/${this.state.id}`)
+        .then((Response) => {
+          this.props.refresh();
+        });
+    }
+  }
+
+  RsvpAdd() {
+    if (this.state.Rsvpadd) {
+      this.setState({
+        RsvpAdd: false,
+        Rsvpremove: true,
+      });
+    } else {
+      this.setState({
+        RsvpAdd: true,
+        Rsvpremove: false,
+      });
     }
   }
 
@@ -59,8 +95,9 @@ class Event_structure extends Component {
     axios
       .get(`http://localhost:5000/ClubCom/${this.state.organizer}`)
       .then((Response) => {
+        console.log(Response);
         this.state.organizerD = Response.data;
-        this.updateOrganizer(this.state.organizerD.Name);
+        this.updateOrganizer(this.state.organizerD.username);
       });
   }
 
@@ -75,7 +112,9 @@ class Event_structure extends Component {
               <h2 className="event-heading">{this.props.name}</h2>
               <span className="organize">
                 By{" "}
-                <span className="organizer">{this.state.organizerD.Name}</span>
+                <span className="organizer">
+                  {this.state.organizerD.username}
+                </span>
               </span>
             </span>
 
@@ -85,36 +124,44 @@ class Event_structure extends Component {
               <span className="textclr"> Time : {this.props.time}</span>
             </div>
             <div className="info">{this.props.description}</div>
-            <NavLink
-              to={{
-                pathname: "/Event_more",
-                state: {
-                  id: this.state.id,
-                  organizer: this.state.organizer1,
-                },
-              }}
-            >
-              <button className="more-info">More Info >></button>
-            </NavLink>
-            {this.props.status && (
-              <button className="RSVP">I'm interested</button>
-            )}
-
-            {!this.props.status && (
-              <button
-                href="/Admin_dashboard"
-                onClick={() => {
-                  this.setState({
-                    request: true,
-                  });
-
-                  // this.requestApprove(this.state.id);
+            <div className="container row">
+              <NavLink
+                to={{
+                  pathname: "/Event_more",
+                  state: {
+                    id: this.state.id,
+                    organizer: this.state.organizer1,
+                  },
                 }}
-                className="approval"
               >
-                Approve
-              </button>
-            )}
+                <button className="more-info">More Info >></button>
+              </NavLink>
+              {this.props.status && (
+                <div>
+                  <button onClick={this.RsvpAdd.bind(this)} className="RSVP">
+                    I'm interested
+                  </button>{" "}
+                  &nbsp;
+                  {/* <span>{this.props.NoOfAttendees}</span> */}
+                </div>
+              )}
+
+              {!this.props.status && (
+                <button
+                  href="/Admin_dashboard"
+                  onClick={() => {
+                    this.setState({
+                      request: true,
+                    });
+
+                    // this.requestApprove(this.state.id);
+                  }}
+                  className="approval"
+                >
+                  Approve
+                </button>
+              )}
+            </div>
           </div>
         </div>
       );

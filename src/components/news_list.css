@@ -15,6 +15,6 @@
 .news-back {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  height: 70vh;
   overflow-y: scroll !important;
 }

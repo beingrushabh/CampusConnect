@@ -40,11 +40,7 @@ class LoginPage extends Component {
           <Switch>
             {/* <Route path="/" component={Login} exact /> */}
             <Route path="/" component={DashBoard} exact />
-            <Route path="/News" component={News_list} />
-            <Route path="/Add_events" component={Add_events} />
-            <Route path="/AddNews" component={AddNews} />
             <Route path="/Event_more" component={Event_more} />
-            <Route path="/UserForm" component={UserForm} />
             <Route path="/Admin_dashboard" component={Admin_dashboard} />
             <Route path="/student" component={Student_DashBoard} />
             <Route path="/organizer" component={Organizer_dashboard} />

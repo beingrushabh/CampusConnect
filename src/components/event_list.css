@@ -14,8 +14,9 @@
 
 .event-back {
   display: flex;
+  width: 100%;
   flex-direction: row;
-  height: 100vh;
+  height: 70vh;
   margin-left: 0px;
 }
 
@@ -29,4 +30,8 @@
   width: 130px !important;
   border-radius: 4px !important;
   align-content: center !important;
+}
+
+.eventList {
+  width: 100% !important;
 }

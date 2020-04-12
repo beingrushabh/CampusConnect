@@ -14,9 +14,9 @@ class Organizer_Events extends Component {
     updated: false,
     organizerD: [],
     ComD: [],
-    url: `http://localhost:5000/Event`,
+    loadevents: false,
     urlcom: "http://localhost:5000/ClubCom/",
-    userdetails: this.props.userdetails,
+    userdetails: [],
   };
 
   constructor(props) {
@@ -24,19 +24,33 @@ class Organizer_Events extends Component {
     // this.addFilter = this.addFilter.bind(this);
   }
 
+  componentDidUpdate(prevprops, prevstate) {
+    if (prevstate.loadevents != this.state.loadevents) {
+      axios
+        .get(
+          `http://localhost:5000/Event/filterBy/${this.state.userdetails.username}`
+        )
+        .then((Response) => {
+          this.state.EventD = Response.data;
+          console.log(this.state.EventD);
+          this.setState({
+            updated: true,
+          });
+        });
+    }
+  }
   componentDidMount() {
     console.log("fetch");
-    axios.get(this.state.url).then((Response) => {
-      this.state.EventD = Response.data;
-      console.log(this.state.EventD);
-      this.setState({
-        updated: true,
-      });
-    });
 
-    axios.get("http:/localhost:5000/User/logged_in").then((Response) => {
-      console.log(Response);
-    });
+    axios
+      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+      .then((Response) => {
+        console.log("in");
+        this.setState({
+          userdetails: Response.data.user,
+          loadevents: true,
+        });
+      });
 
     axios.get(this.state.urlCom).then((Response) => {
       this.state.ComD = Response.data;

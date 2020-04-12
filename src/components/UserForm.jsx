@@ -114,11 +114,11 @@ class UserForm extends Component {
               <div className="container">
                 <div className="row">
                   <div className="col-lg-6">
-                    {/* <p>User Name :</p> */}
+                    {/* <p>*</p> */}
                     <input
                       type="text"
                       name="username"
-                      placeholder="Enter Username"
+                      placeholder="*Enter Username"
                       required
                       onChange={(event) => {
                         this.setState({
@@ -132,7 +132,7 @@ class UserForm extends Component {
                     {/* <p>Password :</p> */}
                     <input
                       type="password"
-                      placeholder="Enter Password"
+                      placeholder="*Enter Password"
                       required
                       onChange={(event) => {
                         this.setState({
@@ -150,7 +150,7 @@ class UserForm extends Component {
                   pattern="{/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}"
                   name="emailid"
                   className="form-control"
-                  placeholder="Enter EmailID"
+                  placeholder="*Enter EmailID"
                   className="form-group"
                   required
                   onChange={(event) => {
@@ -167,7 +167,6 @@ class UserForm extends Component {
                       type="text"
                       name="name"
                       placeholder="Enter Name"
-                      required
                       className="form-group"
                       onChange={(event) => {
                         this.setState({
@@ -181,7 +180,7 @@ class UserForm extends Component {
                     <input
                       type="text"
                       name="Contact"
-                      placeholder="Enter Contact"
+                      placeholder="*Enter Contact"
                       required
                       onChange={(event) => {
                         this.setState({
@@ -216,7 +215,6 @@ class UserForm extends Component {
                       type="text"
                       name="age"
                       placeholder="Enter your Age for eg: 20 years"
-                      required
                       onChange={(event) => {
                         this.setState({
                           Age: event.target.value,
@@ -234,7 +232,6 @@ class UserForm extends Component {
                   cols="50"
                   name="address"
                   placeholder="Enter Address"
-                  required
                   onChange={(event) => {
                     this.setState({
                       Address: event.target.value,
@@ -248,7 +245,8 @@ class UserForm extends Component {
                     <input
                       type="text"
                       name="cid"
-                      placeholder="Enter college ID"
+                      className="required"
+                      placeholder="*Enter college ID"
                       required
                       onChange={(event) => {
                         this.setState({
@@ -260,6 +258,7 @@ class UserForm extends Component {
                   <div className="col-lg-6">
                     {/* <p>Link for LinkedIn :</p> */}
                     <RadioGroup
+                      required
                       name="UserType"
                       style={{ display: "flex", width: "100%" }}
                       onChange={(event) => {

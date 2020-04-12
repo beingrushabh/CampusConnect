@@ -21,24 +21,22 @@ import Organizer_Events from "./organizer_event_list";
 
 export class DashBoard extends Component {
   state = {
-    user: "RUSHABH",
     form_visible: false,
     event_visible: true,
     toggle_form: "Request Event",
     login: false,
     login_btn: "Login",
-    topple_login: false,
+    toggle_login: false,
   };
   constructor(props) {
     super(props);
-    this.AddEvent = this.AddEvent.bind(this);
 
     this.toggleLogin = this.toggleLogin.bind(this);
   }
 
   toggleLogin() {
     this.setState({
-      topple_login: !this.state.toggle_login,
+      toggle_login: !this.state.toggle_login,
     });
   }
 
@@ -89,7 +87,7 @@ export class DashBoard extends Component {
             <News_list />
           </div>
         </div>
-        {this.state.topple_login ? (
+        {this.state.toggle_login ? (
           <PopLogin closepopup={this.toggleLogin.bind(this)} />
         ) : null}
       </div>
@@ -99,34 +97,35 @@ export class DashBoard extends Component {
 
 export class Student_DashBoard extends Component {
   state = {
-    user: "RUSHABH",
     form_visible: false,
     event_visible: true,
     toggle_form: "Request Event",
     login: false,
     login_btn: "Login",
     topple_login: false,
+    userdetails: [],
+    loggedout: false,
   };
   constructor(props) {
     super(props);
-    this.AddEvent = this.AddEvent.bind(this);
-
-    this.toggleLogin = this.toggleLogin.bind(this);
   }
 
-  toggleLogin() {
-    this.setState({
-      topple_login: !this.state.toggle_login,
-    });
-  }
-
-  AddEvent() {
-    this.setState({ form_visible: !this.state.form_visible });
-    this.setState({ event_visible: !this.state.event_visible });
-    if (this.state.toggle_form == "Request Event") {
-      this.setState({ toggle_form: "Event List" });
-    } else {
-      this.setState({ toggle_form: "Request Event" });
+  componentDidUpdate(prevprops, prevstate) {
+    if (prevstate.logoutstate != this.state.logoutstate) {
+      const user = {
+        username: this.state.userdetails.username,
+      };
+      console.log(user);
+      axios
+        .post("http://localhost:5000/User/logout", user, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
+          this.setState({
+            loggedout: true,
+          });
+        });
     }
   }
   logout() {
@@ -134,8 +133,22 @@ export class Student_DashBoard extends Component {
       logoutstate: true,
     });
   }
-
+  componentDidMount() {
+    axios
+      .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
+      .then((res) => {
+        console.log("simple form user", res);
+        if (res.data.user != null) {
+          this.setState({
+            userdetails: res.data.user,
+          });
+        }
+      });
+  }
   render() {
+    if (this.state.loggedout) {
+      return <Redirect to="/" />;
+    }
     return (
       <div class="dashboard">
         <div className="brand">
@@ -144,14 +157,16 @@ export class Student_DashBoard extends Component {
               <h2> Campus Connect</h2>
             </NavLink>
 
-            <div className="col-lg-5"></div>
+            <div className="col-lg-4"></div>
             <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
                 <a class="nav-item nav-link" href="/PlacementUpdates">
                   Placement Updates
                 </a>
+                <a class="nav-item nav-link">
+                  {this.state.userdetails.username}
+                </a>
                 <a class="nav-item nav-link" onClick={this.logout.bind(this)}>
-                  {" "}
                   Log Out
                 </a>
               </div>
@@ -395,7 +410,7 @@ export class Organizer_dashboard extends Component {
                 <h2> Campus Connect</h2>
               </NavLink>
 
-              <div className="col-lg-5"></div>
+              <div className="col-lg-4"></div>
               <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                   <a
@@ -405,7 +420,7 @@ export class Organizer_dashboard extends Component {
                     Request Event
                   </a>
                   <a class="nav-item nav-link" href="#">
-                    {this.state.user}
+                    {this.state.userdetails.username}
                   </a>
                   {/* <NavLink to="/" class="nav-item nav-link " tabindex="-1"> */}
                   <a class="nav-item nav-link" onClick={this.logout.bind(this)}>
@@ -422,7 +437,7 @@ export class Organizer_dashboard extends Component {
               <Organizer_Events userdetails={this.state.userdetails} />
             </div>
             <div className="col-lg-4 col-md-4 col-sm-12">
-              <News_list showRemove={true} />
+              <News_list showRemove={false} />
             </div>
           </div>
 

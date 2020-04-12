@@ -19,10 +19,12 @@ class Events extends Component {
     filteradded: false,
     url: "http://localhost:5000/Event/",
     urlcom: "http://localhost:5000/ClubCom/",
+    refresh: false,
   };
 
   constructor(props) {
     super(props);
+    this.Refresh = this.Refresh.bind(this);
   }
 
   componentDidMount() {
@@ -35,21 +37,39 @@ class Events extends Component {
       });
     });
 
-    axios.get(this.state.urlCom).then((Response) => {
-      this.state.ComD = Response.data;
+    axios.get("http://localhost:5000/ClubCom/").then((Response) => {
+      this.setState({
+        ComD: Response.data,
+      });
       console.log("comD", this.state.ComD);
     });
   }
 
+  Refresh() {
+    this.setState({
+      refresh: !this.state.refresh,
+    });
+    console.log(this.state.refresh);
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.filterText != this.state.filterText) {
-      this.setState({
-        url: `http://localhost:5000/Event/filterBy/${this.state.filterText}`,
+    if (prevState.refresh != this.state.refresh) {
+      axios.get("http://localhost:5000/Event/").then((Response) => {
+        this.state.EventD = Response.data;
+        console.log(this.state.EventD);
+        this.setState({
+          updated: true,
+        });
       });
     }
-    if (prevState.url != this.state.url) {
-      axios.get(this.state.url).then((Response) => {
+    if (prevState.filterText != this.state.filterText) {
+      const url = `http://localhost:5000/Event/filterBy/${this.state.filterText}`;
+
+      axios.get(url).then((Response) => {
         this.state.EventD = Response.data;
+        this.setState({
+          filteradded: true,
+        });
         console.log("EventD", this.state.EventD);
       });
     }
@@ -72,9 +92,27 @@ class Events extends Component {
           description={data.Description}
           status={true}
           duration={data.Duration}
+          NoOfAttendees={data.NoOfAttendees}
+          refresh={this.Refresh}
         />
       );
     });
+
+    const filterlist = this.state.ComD.map((data) => {
+      return (
+        <a
+          class="dropdown-item "
+          onClick={() => {
+            this.setState({
+              filterText: data.username,
+            });
+          }}
+        >
+          {data.username}
+        </a>
+      );
+    });
+
     return (
       <div>
         <div className=" container header">
@@ -99,50 +137,15 @@ class Events extends Component {
                     class="dropdown-menu"
                     aria-labelledby="dropdownMenuButton"
                   >
-                    <a class="dropdown-item" href="/">
-                      Cultural
-                    </a>
-                    <a
-                      class="dropdown-item "
-                      // onClick={this.addFilter("Annual Festival Commitee")}
-                    >
-                      Annual Festival Commitee
-                    </a>
-                    <a class="dropdown-item ">DTG</a>
-                    <a class="dropdown-item ">Cubic</a>
-                    <a
-                      class="dropdown-item "
-                      onClick={() => {
-                        this.setState({
-                          filterText: "Debate Club",
-                        });
-                      }}
-                    >
-                      Debate Club
-                    </a>
-                    <a class="dropdown-item ">DSC</a>
-                    <a class="dropdown-item ">Sport</a>
-                    <a
-                      class="dropdown-item "
-                      onClick={() => {
-                        this.setState({
-                          filteradded: true,
-                        });
-                        return this.addFilter("Khelaiya Club");
-                      }}
-                    >
-                      Khelaiya Club
-                    </a>
+                    {filterlist}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="row event-back">
-          <div className="scrollEvent">
-            <div className="eventList">{EventList}</div>
-          </div>
+        <div className="row event-back scrollEvent">
+          <div className="eventList">{EventList}</div>
         </div>
       </div>
     );

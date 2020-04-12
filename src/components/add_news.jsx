@@ -43,7 +43,7 @@ class AddNews extends Component {
       <React.Fragment>
         {/* <img src={background} className="main" /> */}
         <div className="main popup">
-          <div className="SimpleForm">
+          <div className="NewsForm">
             {/* <img src={userlogo} className="user" /> */}
             <h1>Add News</h1>
 

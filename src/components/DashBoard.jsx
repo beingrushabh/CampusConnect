@@ -13,11 +13,15 @@ import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import "./login/login.css";
 import News_list from "./news_list";
+import $ from "jquery";
+import Popper from "popper.js";
+
 import AddNews from "./add_news";
 import UserForm from "./UserForm";
 import { PopLogin } from "./popupLogin";
 import axios from "axios";
 import Organizer_Events from "./organizer_event_list";
+import {ChangePassword} from "./changepassword"
 
 export class DashBoard extends Component {
   state = {
@@ -104,6 +108,7 @@ export class Student_DashBoard extends Component {
     login_btn: "Login",
     topple_login: false,
     userdetails: [],
+    toggle_password: false,
     loggedout: false,
   };
   constructor(props) {
@@ -133,6 +138,7 @@ export class Student_DashBoard extends Component {
       logoutstate: true,
     });
   }
+  
   componentDidMount() {
     axios
       .get("http://localhost:5000/User/isLoggedIn", { withCredentials: true })
@@ -157,9 +163,20 @@ export class Student_DashBoard extends Component {
               <h2> Campus Connect</h2>
             </NavLink>
 
-            <div className="col-lg-4"></div>
+            <div className="col-lg-3"></div>
             <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
+                <a
+                  onClick={()=>{
+                    this.setState({
+      toggle_password: !this.state.toggle_password,
+    });
+                  }}
+                  class="nav-item nav-link "
+                  tabindex="-1"
+                >
+                  Change Password                  
+                </a>
                 <a class="nav-item nav-link" href="/PlacementUpdates">
                   Placement Updates
                 </a>
@@ -180,11 +197,18 @@ export class Student_DashBoard extends Component {
           <div className="col-lg-4 col-md-4 col-sm-12">
             <News_list />
           </div>
-        </div>
-        {this.state.topple_login ? (
-          <PopLogin closepopup={this.toggleLogin.bind(this)} />
+</div>
+{this.state.toggle_password ? (
+          <ChangePassword closepopup={() => {
+            this.setState({
+      toggle_password: !this.state.toggle_password,
+    });
+          }} />
         ) : null}
-      </div>
+
+        </div>
+        
+      
     );
   }
 }
@@ -281,6 +305,18 @@ export class Admin_dashboard extends Component {
             <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
                 <a
+                  onClick={()=>{
+                    this.setState({
+      toggle_password: !this.state.toggle_password,
+    });
+                  }}
+                  class="nav-item nav-link "
+                  tabindex="-1"
+                >
+                  Change Password                  
+                </a>
+                
+                <a
                   class="nav-item nav-link"
                   onClick={this.toggleeventbtn.bind(this)}
                 >
@@ -332,6 +368,14 @@ export class Admin_dashboard extends Component {
         {this.state.adduser ? (
           <UserForm closePopup={this.toggleUser.bind(this)} />
         ) : null}
+
+        {this.state.toggle_password ? (
+          <ChangePassword closepopup={() => {
+            this.setState({
+      toggle_password: !this.state.toggle_password,
+    });
+          }} />
+        ) : null}
       </div>
     );
   }
@@ -345,6 +389,7 @@ export class Organizer_dashboard extends Component {
     logoutstate: false,
     loggedout: false,
     userdetails: [],
+    toggle_password: false,
   };
 
   logout() {
@@ -410,9 +455,23 @@ export class Organizer_dashboard extends Component {
                 <h2> Campus Connect</h2>
               </NavLink>
 
-              <div className="col-lg-4"></div>
+              <div className="col-lg-3"></div>
               <div class=" collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
+                   <a
+                  onClick={()=>{
+                    this.setState({
+      toggle_password: !this.state.toggle_password,
+    });
+                  }}
+                  class="nav-item nav-link "
+                  tabindex="-1"
+                >
+                  Change Password                  
+                </a>
+                  
+                  
+                  
                   <a
                     class="nav-item nav-link"
                     onClick={this.toggleEvent.bind(this)}
@@ -451,6 +510,15 @@ export class Organizer_dashboard extends Component {
           {this.state.adduser ? (
             <UserForm closePopup={this.toggleUser.bind(this)} />
           ) : null}
+
+{this.state.toggle_password ? (
+          <ChangePassword closepopup={() => {
+            this.setState({
+      toggle_password: !this.state.toggle_password,
+    });
+          }} />
+        ) : null}
+
         </div>
       );
     }

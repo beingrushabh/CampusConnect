@@ -10,17 +10,41 @@ router.route('/').get((req, res) => {
 });
 
 //id of the event
+// router.route('/add/:id').post((req, res) => {
+//   const Description = req.body.Description;
+//   const Event = req.params.id;
+//   const reported = false;
+//   User.findOne({username: String(req.body.username)},{'_id':1})
+// 	.exec(function(err,user){
+// 	  if(err)
+// 		  return console.log(err);
+		
+// 	User=User._id;
+  
+  
+//   const newComment = new Comment({
+// 	  Event,  
+// 	  Description, 
+//     User,
+//     reported	  
+// 	});
+
+//   newComment.save()
+//     .then(() => res.json('Comment added!'))
+//     .catch(err => res.status(400).json('Error: ' + err));
+	
+// 	});
+	
+// });
+
+
+
+
 router.route('/add/:id').post((req, res) => {
   const Description = req.body.Description;
   const Event = req.params.id;
+  const User = req.body.username
   const reported = false;
-  User.findOne({username: String(req.body.username)},{'_id':1})
-	.exec(function(err,user){
-	  if(err)
-		  return console.log(err);
-		
-	User=User._id;
-  
   
   const newComment = new Comment({
 	  Event,  
@@ -33,9 +57,8 @@ router.route('/add/:id').post((req, res) => {
     .then(() => res.json('Comment added!'))
     .catch(err => res.status(400).json('Error: ' + err));
 	
-	});
-	
 });
+
 
 //find all comments for the event with 'id'
 router.route('/:id').get((req, res) => {

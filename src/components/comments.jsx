@@ -15,6 +15,7 @@ class Comments extends Component {
     comments: [],
     refresh: false,
     refreshed: false,
+    loggedin: false,
   };
 
   componentDidUpdate(prevprops,prevstate){
@@ -49,6 +50,7 @@ class Comments extends Component {
         if (res.data.user != null) {
           this.setState({
             userdetails: res.data.user,
+            loggedin: true,
           });
         }
       });
@@ -73,6 +75,11 @@ e.preventDefault();
   )
 }
 
+refresh(){
+  this.setState({
+    refresh : !this.state.refresh
+  })
+}
   render() {
     const commentList = this.state.comments.map((data) => (
       <CommentTemplate
@@ -82,9 +89,12 @@ e.preventDefault();
         User={data.User}
         Reported={data.reported}
         Description={data.Description}
+        refresh={this.refresh.bind(this)}
       />
     ));
     return <div>{commentList}
+   { this.state.loggedin &&(
+   
    <form class="addcomment" onSubmit={this.post_comment.bind(this)}>
    <span  class="heading" style={{fontSize: "20px" }}><b>Add Comment</b></span>
   <div class="form-group">
@@ -107,7 +117,7 @@ e.preventDefault();
   </div>
   <button type="submit" class="btn btn-primary">Post</button>
 </form>
-    
+   )}
     </div>;
   }
 }

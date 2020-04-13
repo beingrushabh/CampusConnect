@@ -105,7 +105,7 @@ class Event_more extends Component {
           </nav>
         </div>
         <div>
-          <div className="event-template">
+          <div style={{padding: "10px", lineHeight: "40px"}} className="event-template">
             <span>
               <h2 className="event-heading">{this.state.EventD.Name}</h2>
               <span className="organize">
@@ -115,9 +115,16 @@ class Event_more extends Component {
 
             <div className="date">
               <span className="textclr"> Date : {this.state.EventD.Date}</span>
-              &nbsp;&nbsp;&nbsp;
+              &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
               <span className="textclr"> Time : {this.state.EventD.Time}</span>
             </div>
+
+            <div className="date">
+              <span className="textclr"> Venue : {this.state.EventD.Venue}</span>
+              &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+              <span className="textclr"> Duration : {this.state.EventD.Duration} hr</span>
+            </div>
+            <span className="date textclr"> Contact : {this.state.EventD.Contact} </span>
             <div className="info">{this.state.EventD.Description}</div>
 
             {this.state.userdetails.UserType != "ClubCom" &&
@@ -125,7 +132,7 @@ class Event_more extends Component {
                 <button className="RSVP">I'm interested</button>
               )}
 
-            {!this.state.EventD.Approved && (
+            {!this.state.EventD.Approved && this.state.userdetails.username=="admin" && (
               <button
                 href="/Admin_dashboard"
                 onClick={() => {
@@ -140,7 +147,7 @@ class Event_more extends Component {
                 Approve
               </button>
             )}
-
+<hr/>
             <div class="comments">
               <span class="heading"> Comments</span>
               <Comments

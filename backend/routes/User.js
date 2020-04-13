@@ -150,19 +150,52 @@ router.route("/update/:id").post(async (req, res) => {
 });
 
 //change password: provide old passwordas well with new password
-router.route("/changepassword/:id").post(async (req, res) => {
-  await User.findById(req.params.id)
-    .then((User) => {
-      if (!bcrypt.compareSync(req.body.Oldpassword, User.password)) {
-        return res.status(400).json("Message: The password is invalid");
-      }
-      User.password = bcrypt.hashSync(req.body.Newpassword, 10);
+// router.route("/changepassword/:id").post(async (req, res) => {
+//   await User.findById(req.params.id)
+//     .then((User) => {
+//       if (!bcrypt.compareSync(req.body.Oldpassword, User.password)) {
+//         return res.status(400).json("Message: The password is invalid");
+//       }
+//       User.password = bcrypt.hashSync(req.body.Newpassword, 10);
 
-      User.save()
-        .then(() => res.json("User updated!"))
-        .catch((err) => res.status(400).json("Error: " + err));
+//       User.save()
+//         .then(() => res.json("User updated!"))
+//         .catch((err) => res.status(400).json("Error: " + err));
+//     })
+//     .catch((err) => res.status(400).json("Error: " + err));
+// });
+
+
+router.route("/changepassword/:id").post(async (req, res) => {
+  await ClubCom.findById(req.params.id)
+    .then((ClubCom) => {
+      if (ClubCom == null) {
+        User.findById(req.params.id)
+          .then((User) => {
+            if (!bcrypt.compareSync(req.body.Oldpassword, User.password)) {
+              return res.status(400).json("Message: The password is invalid");
+            }
+            User.password = bcrypt.hashSync(req.body.Newpassword, 10);
+
+            User.save()
+              .then(() => res.json("User updated!"))
+              .catch((err) => res.status(400).json("Error: " + err));
+          })
+          .catch((err) => res.status(400).json("Error: " + err));
+      }
+      else {
+        if (!bcrypt.compareSync(req.body.Oldpassword, ClubCom.password)) {
+          return res.status(400).json("Message: The password is invalid");
+        }
+        ClubCom.password = bcrypt.hashSync(req.body.Newpassword, 10);
+
+        ClubCom.save()
+          .then(() => res.json("User updated!"))
+          .catch((err) => res.status(400).json("Error: " + err));
+      }
+
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .catch((err) => res.status(400).json("Error: " + err))
 });
 
 module.exports = router;
